@@ -39,9 +39,12 @@ main{max-width:1140px;margin:0 auto;padding:1.5rem}
 .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:500}
 .btn-primary:hover{background:var(--accent-text);border-color:var(--accent-text)}
 .btn-sm{height:32px;padding:0 12px;font-size:13px}
+.privacy-note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px;background:var(--gray-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px}
+.privacy-note strong{color:var(--text)}
+.privacy-note a{color:var(--info)}
 
 /* NIGHT CONDITIONS STRIP */
-.conditions{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.25rem}
+.conditions{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:.65rem}
 .cond-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;flex-direction:column;gap:2px}
 .cond-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
 .cond-value{font-size:22px;font-weight:700;color:var(--text);line-height:1.2}
@@ -51,6 +54,8 @@ main{max-width:1140px;margin:0 auto;padding:1.5rem}
 .dot.on{background:var(--accent)}
 .dot.warn{background:#ef9f27}
 .dot.bad{background:#e24b4a}
+.data-source-note{font-size:11px;color:var(--muted);margin:0 0 1rem 2px;line-height:1.4}
+.data-source-note a{color:var(--info)}
 
 /* LIKELIHOOD SCORE */
 .likelihood-banner{background:linear-gradient(135deg,#1a3a10,#3d6b2e);color:#fff;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
@@ -81,6 +86,7 @@ main{max-width:1140px;margin:0 auto;padding:1.5rem}
 .moth-img{width:100%;aspect-ratio:4/3;background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:40px;overflow:hidden;position:relative}
 .moth-img img{width:100%;height:100%;object-fit:cover;display:block}
 .moth-likelihood{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.65);color:#fff;font-size:11px;font-weight:700;padding:3px 7px;border-radius:99px;backdrop-filter:blur(4px)}
+.photo-credit{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,0.62);color:#fff;font-size:9px;line-height:1.25;padding:3px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;backdrop-filter:blur(4px)}
 .moth-body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
 .moth-common{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
 .moth-sci{font-size:11px;color:var(--muted);font-style:italic}
@@ -104,7 +110,7 @@ main{max-width:1140px;margin:0 auto;padding:1.5rem}
 .moth-list{display:flex;flex-direction:column;gap:8px}
 .moth-list-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:box-shadow .15s}
 .moth-list-item:hover{box-shadow:0 2px 12px rgba(0,0,0,0.07)}
-.list-img{width:56px;height:56px;border-radius:var(--radius-sm);background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;flex-shrink:0}
+.list-img{width:56px;height:56px;border-radius:var(--radius-sm);background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;flex-shrink:0;position:relative}
 .list-img img{width:100%;height:100%;object-fit:cover}
 .list-body{flex:1;min-width:0}
 .list-name{font-size:14px;font-weight:700}
@@ -113,12 +119,15 @@ main{max-width:1140px;margin:0 auto;padding:1.5rem}
 .list-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
 .list-score{font-size:18px;font-weight:800;color:var(--accent)}
 .list-score.poor{color:var(--muted)}
+.list-credit{font-size:10px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:360px}
 
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
 .modal{background:var(--surface);border-radius:var(--radius-lg);max-width:560px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
-.modal-img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0;background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:64px;overflow:hidden}
+.modal-img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0;background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:64px;overflow:hidden;position:relative}
 .modal-img img{width:100%;height:100%;object-fit:cover}
+.modal-photo-credit{font-size:11px;color:var(--muted);background:var(--gray-light);padding:7px 1.5rem;border-bottom:1px solid var(--border);line-height:1.35}
+.modal-photo-credit a{color:var(--info)}
 .modal-body{padding:1.5rem}
 .modal-close{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.4);color:#fff;border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .modal-title{font-size:22px;font-weight:800;margin-bottom:2px}
@@ -128,8 +137,6 @@ main{max-width:1140px;margin:0 auto;padding:1.5rem}
 .modal-score-label{font-size:13px;color:var(--accent-text)}
 .modal-section{margin-bottom:1rem}
 .modal-section h3{font-size:12px;text-transform:uppercase;letter-spacing:0.6px;font-weight:700;color:var(--muted);margin-bottom:8px}
-.modal-season-row{display:flex;gap:4px;align-items:center}
-.modal-month{flex:1;text-align:center;font-size:10px;color:var(--muted)}
 .modal-bar-wrap{display:flex;gap:4px;flex:1}
 .modal-bar{flex:1;height:8px;border-radius:4px;background:var(--border)}
 .modal-bar.active{background:var(--accent)}
@@ -141,6 +148,7 @@ main{max-width:1140px;margin:0 auto;padding:1.5rem}
 .modal-links{display:flex;gap:8px;flex-wrap:wrap}
 .modal-link{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--info);text-decoration:none;background:var(--info-light);padding:6px 12px;border-radius:99px}
 .modal-link:hover{text-decoration:underline}
+.disclaimer{font-size:11px;color:var(--muted);line-height:1.45;background:var(--gray-light);border-radius:var(--radius-sm);padding:10px 12px;margin-top:1rem}
 
 /* SKELETON */
 .skeleton{background:var(--gray-light);border-radius:var(--radius);height:240px;animation:pulse 1.4s ease-in-out infinite}
@@ -150,19 +158,8 @@ main{max-width:1140px;margin:0 auto;padding:1.5rem}
 .empty{grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);font-size:15px;line-height:1.8}
 .empty .emoji{font-size:40px;display:block;margin-bottom:12px}
 
-/* PRIVACY / ATTRIBUTION */
-.privacy-note{margin-top:12px;padding:10px 12px;border-radius:var(--radius-sm);background:var(--info-light);color:var(--muted);font-size:12px;line-height:1.45;border-left:3px solid var(--info)}
-.privacy-note strong{color:var(--text)}
-.photo-credit{font-size:10px;color:var(--muted);line-height:1.25;margin-top:4px}
-.photo-credit a{color:var(--info);text-decoration:none}
-.photo-credit a:hover{text-decoration:underline}
-.card-photo-credit{min-height:13px;max-height:28px;overflow:hidden}
-.modal-photo-credit{font-size:11px;margin-bottom:12px;background:var(--gray-light);padding:8px 10px;border-radius:var(--radius-sm)}
-.source-note{max-width:860px;margin:0 auto;line-height:1.55}
-.source-note p{margin:4px 0}
-
 /* FOOTER */
-footer{margin-top:3rem;padding:1.5rem;text-align:center;font-size:12px;color:var(--muted);border-top:1px solid var(--border)}
+footer{margin-top:3rem;padding:1.5rem;text-align:center;font-size:12px;color:var(--muted);border-top:1px solid var(--border);line-height:1.6}
 footer a{color:var(--info)}
 
 /* TOAST */
@@ -176,6 +173,7 @@ footer a{color:var(--info)}
   .conditions{grid-template-columns:repeat(2,1fr)}
   .likelihood-banner{padding:1rem}
   .likelihood-score{font-size:40px}
+  .list-credit{max-width:180px}
 }
 </style>
 </head>
@@ -200,17 +198,21 @@ footer a{color:var(--info)}
 <main>
   <div class="search-card">
     <div class="search-row">
-      <input type="text" id="loc-input" placeholder="Enter city, region/country, or postal code…" />
+      <input type="text" id="loc-input" placeholder="Enter city, region/country, or postal code…" autocomplete="off" />
       <button class="btn btn-primary" onclick="searchByText()">🔍 Search</button>
       <button class="btn" onclick="geoLocate()">📍 My location</button>
-      <button class="btn" onclick="clearSavedLocation()">Forget saved</button>
     </div>
-    <p class="privacy-note"><strong>Location/privacy:</strong> searches and browser-provided coordinates are sent to iNaturalist, Open-Meteo, and OpenStreetMap/Nominatim to retrieve moth, weather, and place data. Your last selected location is saved only in this browser using localStorage; use “Forget saved” to remove it.</p>
+    <p class="privacy-note">
+      <strong>Location privacy:</strong> searches send the typed place or browser-provided coordinates to iNaturalist, Open-Meteo, and OpenStreetMap/Nominatim to retrieve moth, weather, and place data. Your last selected location is stored only in this browser using localStorage.
+    </p>
     <div class="status-bar" id="status"></div>
   </div>
 
   <div id="conditions-section" style="display:none">
     <div class="conditions" id="conditions-grid"></div>
+    <div class="data-source-note">
+      Weather from <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a>; location lookup from <a href="https://nominatim.openstreetmap.org" target="_blank" rel="noopener noreferrer">OpenStreetMap/Nominatim</a>. Estimated scores are heuristic, not scientific forecasts.
+    </div>
     <div class="likelihood-banner" id="likelihood-banner">
       <div class="likelihood-left">
         <h2 id="likelihood-label">Excellent night for moths</h2>
@@ -228,9 +230,9 @@ footer a{color:var(--info)}
         <option value="count">Most observed</option>
         <option value="alpha">Name A–Z</option>
       </select>
-      <label style="margin-left:8px">Family:</label>
+      <label style="margin-left:8px">Group:</label>
       <select id="fam-sel" onchange="renderMoths()">
-        <option value="">All families</option>
+        <option value="">All groups</option>
       </select>
       <span class="result-count" id="result-count"></span>
       <div class="view-toggle">
@@ -243,11 +245,10 @@ footer a{color:var(--info)}
 </main>
 
 <footer>
-  <div class="source-note">
-    <p>Observation data: <a href="https://www.inaturalist.org" target="_blank" rel="noopener noreferrer">iNaturalist</a> global research-grade species counts. Photos, when shown, are Creative Commons-licensed iNaturalist taxon photos and remain owned by their photographers.</p>
-    <p>Weather data: <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a>. Location search: <a href="https://nominatim.openstreetmap.org" target="_blank" rel="noopener noreferrer">OpenStreetMap/Nominatim</a>. Inspired by <a href="https://connect-apps.ceh.ac.uk/whats_flying_tonight/" target="_blank" rel="noopener noreferrer">CEH What's Flying Tonight</a>.</p>
-    <p>This tool is an estimate only: flight likelihood combines current weather/moon conditions with nearby seasonal iNaturalist observation counts.</p>
-  </div>
+  Observation data and taxon media: <a href="https://www.inaturalist.org" target="_blank" rel="noopener noreferrer">iNaturalist</a> research-grade observations and taxon photos, with photo attribution/license shown when provided by the API.<br>
+  Weather: <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a> ·
+  Location: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a> via <a href="https://nominatim.openstreetmap.org" target="_blank" rel="noopener noreferrer">Nominatim</a> ·
+  Inspired by <a href="https://connect-apps.ceh.ac.uk/whats_flying_tonight/" target="_blank" rel="noopener noreferrer">CEH What's Flying Tonight</a>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -266,58 +267,43 @@ let moonData = null;
 let currentLat = null, currentLng = null, currentName = '';
 let currentView = 'grid';
 
-// ─── Safety / licensing helpers ──────────────────────────────────
-function escapeHtml(value) {
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+// ─── Safe rendering helpers ──────────────────────────────────────
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>'"]/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+  }[ch]));
 }
 
-function escapeAttr(value) { return escapeHtml(value); }
-
-function licenseAllowsDisplay(code) {
-  if (!code) return false;
-  const allowed = new Set(['cc0','cc-by','cc-by-sa','cc-by-nc','cc-by-nc-sa','cc-by-nd','cc-by-nc-nd']);
-  return allowed.has(String(code).toLowerCase());
+function attr(value) {
+  return escapeHTML(value);
 }
 
 function licenseLabel(code) {
-  const map = {
+  if (!code) return 'license not provided';
+  const c = String(code).toLowerCase();
+  const labels = {
     'cc0': 'CC0',
     'cc-by': 'CC BY',
-    'cc-by-sa': 'CC BY-SA',
     'cc-by-nc': 'CC BY-NC',
-    'cc-by-nc-sa': 'CC BY-NC-SA',
+    'cc-by-sa': 'CC BY-SA',
     'cc-by-nd': 'CC BY-ND',
+    'cc-by-nc-sa': 'CC BY-NC-SA',
     'cc-by-nc-nd': 'CC BY-NC-ND'
   };
-  return map[String(code || '').toLowerCase()] || '';
+  return labels[c] || String(code).toUpperCase();
 }
 
-function licenseUrl(code) {
-  const c = String(code || '').toLowerCase();
-  if (c === 'cc0') return 'https://creativecommons.org/publicdomain/zero/1.0/';
-  const slug = c.replace('cc-', '').replaceAll('-', '/');
-  return slug ? `https://creativecommons.org/licenses/${slug}/4.0/` : 'https://creativecommons.org/licenses/';
+function photoCreditText(moth) {
+  if (!moth.photo) return '';
+  const by = moth.photo.attribution || 'iNaturalist contributor';
+  return `Photo: ${by} · ${licenseLabel(moth.photo.licenseCode)}`;
 }
 
-function photoCreditHtml(m, extraClass = '') {
-  if (!m.photo) return '';
-  const attribution = escapeHtml(m.photoAttribution || 'Photo via iNaturalist');
-  const label = licenseLabel(m.photoLicenseCode);
-  const license = label
-    ? ` · <a href="${escapeAttr(licenseUrl(m.photoLicenseCode))}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${label}</a>`
-    : '';
-  return `<div class="photo-credit ${extraClass}">${attribution}${license}</div>`;
-}
-
-function mothImageHtml(m, size = 'card') {
-  const fallbackSize = size === 'list' ? 24 : size === 'modal' ? 64 : 40;
-  if (!m.photo) return `<span style="font-size:${fallbackSize}px">🦋</span>`;
-  return `<img src="${escapeAttr(m.photo)}" alt="${escapeAttr(m.name)}" loading="lazy" onerror="this.outerHTML='&lt;span style=&quot;font-size:${fallbackSize}px&quot;&gt;🦋&lt;/span&gt;'">`;
+function photoCreditHTML(moth) {
+  const text = photoCreditText(moth);
+  if (!text) return '';
+  const url = moth.photo.pageUrl || `https://www.inaturalist.org/taxa/${moth.id}`;
+  return `<a href="${attr(url)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${escapeHTML(text)}</a>`;
 }
 
 // ─── Date helpers ────────────────────────────────────────────────
@@ -355,7 +341,6 @@ function getMoonPhase() {
   else if (phase < 23.99) { name = 'Last Quarter'; icon = '🌗'; }
   else if (phase < 29.53) { name = 'Waning Crescent'; icon = '🌘'; }
   else { name = 'New Moon'; icon = '🌑'; }
-  // darkness score: new moon = best for moths
   const darkScore = Math.round((1 - illum / 100) * 100);
   return { phase, illum, name, icon, darkScore };
 }
@@ -373,7 +358,7 @@ async function fetchWeather(lat, lng) {
       temp: Math.round(c.temperature_2m),
       wind: Math.round(c.wind_speed_10m),
       clouds: Math.round(c.cloud_cover),
-      precip: c.precipitation
+      precip: Number(c.precipitation || 0)
     };
   } catch(e) { return null; }
 }
@@ -382,22 +367,27 @@ async function fetchWeather(lat, lng) {
 function calcNightScore(w, moon) {
   if (!w || !moon) return { score: 50, label: 'Unknown', desc: 'Weather data unavailable', level: 'fair' };
   let score = 0;
-  // Temperature (moths active above ~50°F, peak 65-80°F)
+
+  // Temperature: moths active above ~50°F, peak roughly 65–80°F.
   if (w.temp >= 65 && w.temp <= 80) score += 35;
   else if (w.temp >= 55 && w.temp < 65) score += 25;
   else if (w.temp >= 50 && w.temp < 55) score += 12;
   else if (w.temp < 50) score += 0;
-  else score += 20; // >80
-  // Wind (calm is better, <10mph ideal)
+  else score += 20; // >80°F
+
+  // Wind: calm is better.
   if (w.wind < 5) score += 25;
   else if (w.wind < 10) score += 18;
   else if (w.wind < 15) score += 10;
   else score += 0;
-  // Moon darkness
+
+  // Moon: darker skies are generally better for light trapping.
   score += Math.round(moon.darkScore * 0.25);
-  // Rain
+
+  // Rain: strongly suppresses flight.
   if (w.precip > 0) score = Math.round(score * 0.3);
-  // Clouds (mild cloud ok, heavy bad)
+
+  // Heavy cloud penalty only when not raining.
   if (w.clouds > 80 && w.precip === 0) score = Math.round(score * 0.85);
 
   score = Math.min(100, Math.max(0, score));
@@ -406,20 +396,18 @@ function calcNightScore(w, moon) {
   if (w.precip > 0) { label = 'Poor — rain expected'; desc = 'Moths shelter during rain'; level = 'poor'; }
   else if (score >= 80) { label = 'Excellent night for moths'; desc = 'Warm, calm & dark — ideal conditions'; level = 'good'; }
   else if (score >= 60) { label = 'Good night for moths'; desc = 'Conditions are favorable'; level = 'good'; }
-  else if (score >= 40) { label = 'Fair night for moths'; desc = 'Some moths will be flying'; level = 'fair'; }
+  else if (score >= 40) { label = 'Fair night for moths'; desc = 'Some moths may be flying'; level = 'fair'; }
   else { label = 'Poor night for moths'; desc = w.temp < 50 ? 'Too cold for most species' : 'Unfavorable conditions'; level = 'poor'; }
   return { score, label, desc, level };
 }
 
 function calcMothScore(moth, nightScore) {
-  // Combine species commonness with night conditions
   const commonScore = Math.min(100, Math.round(Math.log10(moth.count + 1) * 40));
   return Math.round((commonScore * 0.4) + (nightScore * 0.6));
 }
 
 // ─── Season bars ─────────────────────────────────────────────────
 function seasonBars(peakMonths) {
-  // peakMonths: array of 1-12 that are active/peak
   const now = new Date().getMonth() + 1;
   return MONTHS_SHORT.map((m, i) => {
     const mo = i + 1;
@@ -429,16 +417,12 @@ function seasonBars(peakMonths) {
   }).join('');
 }
 
-// Rough season estimate from observation month data (simplified)
-function estimateSeasonMonths(moth) {
-  // Use a rough heuristic — most moths have a 3-5 month season
-  // centered around the current window months
+function estimateSeasonMonths() {
+  // Placeholder phenology heuristic: current month ± nearby months.
+  // Species-specific monthly observation curves would be a better future upgrade.
   const now = new Date().getMonth() + 1;
   const active = [];
-  for (let i = -2; i <= 3; i++) {
-    let m = ((now - 1 + i + 12) % 12) + 1;
-    active.push(m);
-  }
+  for (let i = -2; i <= 3; i++) active.push(((now - 1 + i + 12) % 12) + 1);
   const peak = [now, ((now % 12) + 1)];
   return { active, peak };
 }
@@ -480,13 +464,13 @@ function renderConditions(w, moon, nightResult) {
     </div>
     <div class="cond-card">
       <div class="cond-label">${moon.icon} Moon</div>
-      <div class="cond-value" style="font-size:16px;padding-top:4px">${moon.name}</div>
+      <div class="cond-value" style="font-size:16px;padding-top:4px">${escapeHTML(moon.name)}</div>
       <div class="cond-sub">${moon.illum}% lit · ${moon.darkScore >= 75 ? 'Very dark' : moon.darkScore >= 50 ? 'Fairly dark' : moon.darkScore >= 25 ? 'Some light' : 'Bright night'}</div>
       <div class="cond-rating">${moonDots.map(d=>`<div class="dot ${d}"></div>`).join('')}</div>
     </div>
     <div class="cond-card">
       <div class="cond-label">🌧 Precipitation</div>
-      <div class="cond-value">${w ? (w.precip > 0 ? w.precip.toFixed(1) + '"' : 'None') : '—'}</div>
+      <div class="cond-value">${w ? (w.precip > 0 ? w.precip.toFixed(1) + ' in' : 'None') : '—'}</div>
       <div class="cond-sub">${w ? (w.precip > 0 ? 'Moths will shelter' : 'Clear — good') : 'unavailable'}</div>
       <div class="cond-rating"><div class="dot ${w && w.precip === 0 ? 'on' : 'bad'}"></div><div class="dot ${w && w.precip === 0 ? 'on' : 'bad'}"></div><div class="dot ${w && w.precip === 0 ? 'on' : 'bad'}"></div></div>
     </div>
@@ -526,24 +510,28 @@ function renderMoths() {
   else renderList(moths, r);
 }
 
+function imageHTML(moth, sizeClass) {
+  if (!moth.photo || !moth.photo.url) return sizeClass === 'list' ? '<span style="font-size:24px">🦋</span>' : '<span style="font-size:40px">🦋</span>';
+  const fallback = sizeClass === 'list' ? '<span style=&quot;font-size:24px&quot;>🦋</span>' : '<span style=&quot;font-size:40px&quot;>🦋</span>';
+  return `<img src="${attr(moth.photo.url)}" alt="${attr(moth.name)}" loading="lazy" onerror="this.parentElement.innerHTML='${fallback}'">`;
+}
+
 function renderGrid(moths, container) {
   container.innerHTML = '<div class="moth-grid">' + moths.map(m => {
     const { active, peak } = estimateSeasonMonths(m);
     const badge = m.count > 100 ? '<span class="badge badge-common">Common</span>'
       : m.count > 20 ? '<span class="badge badge-occasional">Occasional</span>'
       : '<span class="badge badge-rare">Rare</span>';
-    const img = mothImageHtml(m, 'card');
-    const credit = photoCreditHtml(m, 'card-photo-credit');
-    const scoreColor = m.flightScore >= 70 ? 'var(--accent)' : m.flightScore >= 45 ? '#ef9f27' : '#888';
+    const credit = photoCreditText(m) ? `<div class="photo-credit" title="${attr(photoCreditText(m))}">${escapeHTML(photoCreditText(m))}</div>` : '';
     return `<div class="moth-card" onclick="openModal(${m.id})">
       <div class="moth-img">
-        ${img}
-        <div class="moth-likelihood" style="background:rgba(0,0,0,0.6)">${m.flightScore}%</div>
+        ${imageHTML(m, 'grid')}
+        <div class="moth-likelihood">${m.flightScore}%</div>
+        ${credit}
       </div>
       <div class="moth-body">
-        <div class="moth-common">${escapeHtml(m.name)}</div>
-        <div class="moth-sci">${escapeHtml(m.sci)}</div>
-        ${credit}
+        <div class="moth-common">${escapeHTML(m.name)}</div>
+        <div class="moth-sci">${escapeHTML(m.sci)}</div>
         <div class="moth-season">${seasonBars([...active,...peak])}</div>
         <div class="moth-footer">
           <span class="moth-obs">👁 ${m.count.toLocaleString()}</span>
@@ -551,7 +539,7 @@ function renderGrid(moths, container) {
         </div>
         <div class="moth-actions">
           <a class="moth-link" href="https://www.inaturalist.org/taxa/${m.id}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">iNaturalist →</a>
-          <button class="share-btn" onclick="event.stopPropagation();shareMoth(${m.id},'${encodeURIComponent(m.name)}')">🔗 Share</button>
+          <button class="share-btn" onclick="event.stopPropagation();shareMoth(${m.id})">🔗 Share</button>
         </div>
       </div>
     </div>`;
@@ -561,19 +549,18 @@ function renderGrid(moths, container) {
 function renderList(moths, container) {
   container.innerHTML = '<div class="moth-list">' + moths.map(m => {
     const { active, peak } = estimateSeasonMonths(m);
-    const img = mothImageHtml(m, 'list');
-    const credit = photoCreditHtml(m, 'card-photo-credit');
     const badge = m.count > 100 ? '<span class="badge badge-common">Common</span>'
       : m.count > 20 ? '<span class="badge badge-occasional">Occasional</span>'
       : '<span class="badge badge-rare">Rare</span>';
     const scoreClass = m.flightScore >= 60 ? '' : 'poor';
+    const credit = photoCreditText(m) ? `<div class="list-credit">${escapeHTML(photoCreditText(m))}</div>` : '';
     return `<div class="moth-list-item" onclick="openModal(${m.id})">
-      <div class="list-img">${img}</div>
+      <div class="list-img">${imageHTML(m, 'list')}</div>
       <div class="list-body">
-        <div class="list-name">${escapeHtml(m.name)}</div>
-        <div class="list-sci">${escapeHtml(m.sci)}</div>
-        ${credit}
+        <div class="list-name">${escapeHTML(m.name)}</div>
+        <div class="list-sci">${escapeHTML(m.sci)}</div>
         <div class="list-season">${seasonBars([...active,...peak])}</div>
+        ${credit}
       </div>
       <div class="list-right">
         <div class="list-score ${scoreClass}">${m.flightScore}%</div>
@@ -600,17 +587,21 @@ function openModal(taxonId) {
   const fs = calcMothScore(m, nightScore);
   const scoreColor = fs >= 70 ? 'var(--accent)' : fs >= 45 ? '#ef9f27' : 'var(--muted)';
 
-  const img = `<div class="modal-img">${mothImageHtml(m, 'modal')}</div>`;
-  const credit = photoCreditHtml(m, 'modal-photo-credit');
+  const img = m.photo && m.photo.url
+    ? `<div class="modal-img"><img src="${attr(m.photo.url)}" alt="${attr(m.name)}"></div>`
+    : `<div class="modal-img">🦋</div>`;
+  const credit = photoCreditText(m)
+    ? `<div class="modal-photo-credit">${photoCreditHTML(m)}</div>`
+    : `<div class="modal-photo-credit">No embedded photo license metadata was provided by the API. Use the iNaturalist link before reusing any image.</div>`;
 
   const html = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
     <div class="modal">
       ${img}
+      ${credit}
       <button class="modal-close" onclick="closeModal()">✕</button>
       <div class="modal-body">
-        <div class="modal-title">${escapeHtml(m.name)}</div>
-        <div class="modal-sci">${escapeHtml(m.sci)}</div>
-        ${credit}
+        <div class="modal-title">${escapeHTML(m.name)}</div>
+        <div class="modal-sci">${escapeHTML(m.sci)}</div>
         <div class="modal-score-row">
           <div class="modal-score-num" style="color:${scoreColor}">${fs}%</div>
           <div class="modal-score-label">estimated flight<br>likelihood tonight</div>
@@ -627,8 +618,8 @@ function openModal(taxonId) {
         <div class="modal-section">
           <h3>Observation data</h3>
           <div class="modal-stats">
-            <div class="modal-stat"><div class="modal-stat-label">Records near you</div><div class="modal-stat-value">${m.count.toLocaleString()}</div></div>
-            <div class="modal-stat"><div class="modal-stat-label">Rarity</div><div class="modal-stat-value">${m.count>100?'Common':m.count>20?'Occasional':'Rare'}</div></div>
+            <div class="modal-stat"><div class="modal-stat-label">Research-grade records nearby</div><div class="modal-stat-value">${m.count.toLocaleString()}</div></div>
+            <div class="modal-stat"><div class="modal-stat-label">Relative frequency</div><div class="modal-stat-value">${m.count>100?'Common':m.count>20?'Occasional':'Rare'}</div></div>
           </div>
         </div>
         <div class="modal-section">
@@ -639,8 +630,11 @@ function openModal(taxonId) {
             <a class="modal-link" href="https://bugguide.net/index.php?q=search&amp;keys=${encodeURIComponent(m.sci)}" target="_blank" rel="noopener noreferrer">🐛 BugGuide</a>
           </div>
         </div>
+        <div class="disclaimer">
+          This app uses live third-party APIs and a simplified likelihood model. It is intended as a field-planning aid, not a verified biological forecast. For production use, review each provider's current API terms and usage limits.
+        </div>
         <div style="display:flex;gap:8px;margin-top:1rem">
-          <button class="btn btn-primary btn-sm" style="flex:1" onclick="shareMoth(${m.id},'${encodeURIComponent(m.name)}');closeModal()">🔗 Share this moth</button>
+          <button class="btn btn-primary btn-sm" style="flex:1" onclick="shareMoth(${m.id});closeModal()">🔗 Share this moth</button>
           <button class="btn btn-sm" onclick="closeModal()">Close</button>
         </div>
       </div>
@@ -660,14 +654,17 @@ function closeModal() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 // ─── Share ───────────────────────────────────────────────────────
-function shareMoth(id, encodedName) {
-  const name = decodeURIComponent(encodedName);
+function shareMoth(id) {
+  const m = allMoths.find(x => x.id === id);
+  if (!m) return;
   const url = `https://www.inaturalist.org/taxa/${id}`;
-  const text = `Check out the ${name} — a moth that might be flying tonight near me! 🦋\n${url}`;
+  const text = `Check out the ${m.name} — a moth that might be flying tonight near ${currentName || 'me'}! 🦋\n${url}`;
   if (navigator.share) {
-    navigator.share({ title: name, text, url });
-  } else {
+    navigator.share({ title: m.name, text, url }).catch(() => {});
+  } else if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(() => showToast('Link copied to clipboard!'));
+  } else {
+    showToast('Copy unavailable in this browser.');
   }
 }
 
@@ -692,26 +689,24 @@ function showSkeletons() {
     '<div class="moth-grid">' + Array(12).fill('<div class="skeleton"></div>').join('') + '</div>';
 }
 
-// ─── Families ────────────────────────────────────────────────────
+// ─── Families / groups ───────────────────────────────────────────
 function populateFamilies() {
   const fams = [...new Set(allMoths.map(m => m.family).filter(Boolean))].sort();
   const sel = document.getElementById('fam-sel');
-  sel.innerHTML = '<option value="">All families</option>' +
-    fams.map(f => `<option value="${f}">${f}</option>`).join('');
+  sel.innerHTML = '<option value="">All groups</option>' +
+    fams.map(f => `<option value="${attr(f)}">${escapeHTML(f)}</option>`).join('');
 }
 
 // ─── Main fetch ──────────────────────────────────────────────────
 async function fetchAll(lat, lng, locationName) {
   currentLat = lat; currentLng = lng; currentName = locationName;
 
-  // Save location
   try { localStorage.setItem('wft_last', JSON.stringify({ lat, lng, name: locationName })); } catch(e){}
 
   setStatus(`Loading moths and conditions for ${locationName}…`);
   showSkeletons();
   document.getElementById('conditions-section').style.display = 'none';
 
-  // Moon (instant)
   moonData = getMoonPhase();
   document.getElementById('moon-icon-pill').textContent = moonData.icon;
   document.getElementById('moon-name-pill').textContent = moonData.name;
@@ -719,7 +714,6 @@ async function fetchAll(lat, lng, locationName) {
   document.getElementById('moon-pill').style.display = 'flex';
   document.getElementById('header-moon').textContent = moonData.icon + ' What\'s Flying Tonight?';
 
-  // Fetch weather + moths in parallel
   const [wData, mothData] = await Promise.all([
     fetchWeather(lat, lng),
     fetchMoths(lat, lng)
@@ -744,7 +738,7 @@ async function fetchAll(lat, lng, locationName) {
   }
 
   const total = allMoths.reduce((s,m) => s + m.count, 0);
-  setStatus(`${allMoths.length} species · ${total.toLocaleString()} records · within ${RADIUS_KM}km of ${locationName}`);
+  setStatus(`${allMoths.length} species · ${total.toLocaleString()} research-grade records · within ${RADIUS_KM}km of ${locationName}`);
 
   populateFamilies();
   document.getElementById('controls-section').style.display = 'block';
@@ -764,17 +758,19 @@ async function fetchMoths(lat, lng) {
     const data = await res.json();
     return (data.results || []).map(r => {
       const taxon = r.taxon || {};
-      const photo = taxon.default_photo || null;
-      const licensedPhoto = photo && licenseAllowsDisplay(photo.license_code);
+      const p = taxon.default_photo || null;
       return {
         id: taxon.id,
         name: taxon.preferred_common_name || taxon.name || 'Unknown moth',
         sci: taxon.name || '',
-        photo: licensedPhoto ? (photo.medium_url || photo.url || null) : null,
-        photoAttribution: licensedPhoto ? (photo.attribution || 'Photo via iNaturalist') : '',
-        photoLicenseCode: licensedPhoto ? (photo.license_code || '') : '',
-        count: r.count || 0,
-        family: taxon.iconic_taxon_name || ''
+        photo: p ? {
+          url: p.medium_url || p.url || p.square_url || null,
+          attribution: p.attribution || '',
+          licenseCode: p.license_code || '',
+          pageUrl: `https://www.inaturalist.org/taxa/${taxon.id}`
+        } : null,
+        count: Number(r.count || 0),
+        family: taxon.iconic_taxon_name || 'Moths'
       };
     }).filter(m => m.id);
   } catch(e) { return null; }
@@ -798,32 +794,32 @@ async function searchByText() {
 }
 
 function geoLocate() {
-  if (!navigator.geolocation) { setStatus('Geolocation not supported. Search by city name.', true); return; }
+  if (!navigator.geolocation) { setStatus('Geolocation not supported. Search by city name instead.', true); return; }
   setStatus('Getting your location…');
   navigator.geolocation.getCurrentPosition(async pos => {
     const lat = pos.coords.latitude.toFixed(5);
     const lng = pos.coords.longitude.toFixed(5);
     let name = `${lat}, ${lng}`;
     try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`);
       const d = await res.json();
-      name = d.address.city || d.address.town || d.address.village || d.address.municipality || d.address.county || d.address.state || d.address.country || name;
+      const a = d.address || {};
+      const locality = a.city || a.town || a.village || a.hamlet || a.county || a.state;
+      name = locality && a.country ? `${locality}, ${a.country}` : (d.display_name || name);
     } catch(e) {}
     document.getElementById('loc-input').value = name;
     fetchAll(lat, lng, name);
-  }, () => { setStatus('Could not get location. Search by place name instead.', true); });
-}
-
-function clearSavedLocation() {
-  try { localStorage.removeItem('wft_last'); } catch(e) {}
-  showToast('Saved location removed from this browser.');
+  }, () => { setStatus('Could not get location. Search by city name instead.', true); }, {
+    enableHighAccuracy: false,
+    timeout: 10000,
+    maximumAge: 30 * 60 * 1000
+  });
 }
 
 // ─── Init ────────────────────────────────────────────────────────
 document.getElementById('header-date').textContent = todayStr();
 document.getElementById('loc-input').addEventListener('keydown', e => { if (e.key === 'Enter') searchByText(); });
 
-// Restore saved location or geolocate
 try {
   const saved = JSON.parse(localStorage.getItem('wft_last'));
   if (saved && saved.lat && saved.lng) {
