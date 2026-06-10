@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What's Flying Tonight — USA Moths</title>
+<title>What's Flying Tonight — Global Moths</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -174,7 +174,7 @@ footer a{color:var(--info)}
   <div class="header-left">
     <div>
       <h1 id="header-moon">🌕 What's Flying Tonight?</h1>
-      <p>USA moths · powered by iNaturalist · <span id="header-date"></span></p>
+      <p>Global moths · powered by iNaturalist · <span id="header-date"></span></p>
     </div>
   </div>
   <div class="moon-phase-pill" id="moon-pill" style="display:none">
@@ -189,7 +189,7 @@ footer a{color:var(--info)}
 <main>
   <div class="search-card">
     <div class="search-row">
-      <input type="text" id="loc-input" placeholder="Enter city, state or ZIP code…" />
+      <input type="text" id="loc-input" placeholder="Enter city, region/country, or postal code…" />
       <button class="btn btn-primary" onclick="searchByText()">🔍 Search</button>
       <button class="btn" onclick="geoLocate()">📍 My location</button>
     </div>
@@ -230,7 +230,7 @@ footer a{color:var(--info)}
 </main>
 
 <footer>
-  Data: <a href="https://www.inaturalist.org" target="_blank">iNaturalist</a> (research-grade) ·
+  Data: <a href="https://www.inaturalist.org" target="_blank">iNaturalist</a> global research-grade observations ·
   Weather: <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> ·
   Location: <a href="https://nominatim.openstreetmap.org" target="_blank">OpenStreetMap</a> ·
   Inspired by <a href="https://connect-apps.ceh.ac.uk/whats_flying_tonight/" target="_blank">CEH What's Flying Tonight</a>
@@ -689,7 +689,7 @@ async function fetchMoths(lat, lng) {
     const url = `https://api.inaturalist.org/v1/observations/species_counts` +
       `?taxon_id=${MOTH_TAXON_ID}&without_taxon_id=${BUTTERFLY_TAXON_ID}` +
       `&lat=${lat}&lng=${lng}&radius=${RADIUS_KM}` +
-      `&month=${months}&quality_grade=research&place_id=1` +
+      `&month=${months}&quality_grade=research` +
       `&per_page=60&order=desc&order_by=observations_count`;
     const res = await fetch(url);
     if (!res.ok) throw new Error('API error');
@@ -711,11 +711,12 @@ async function searchByText() {
   if (!q) return;
   setStatus('Looking up location…');
   try {
-    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q + ' USA')}&format=json&limit=1`);
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&addressdetails=1`);
     const data = await res.json();
     if (!data.length) { setStatus('Location not found. Try a city, state, or ZIP.', true); return; }
     const { lat, lon, display_name } = data[0];
-    const name = display_name.split(',').slice(0,2).join(', ').trim();
+    const parts = display_name.split(',').map(p => p.trim()).filter(Boolean);
+    const name = parts.length > 2 ? `${parts[0]}, ${parts[parts.length - 1]}` : display_name;
     document.getElementById('loc-input').value = name;
     fetchAll(parseFloat(lat).toFixed(5), parseFloat(lon).toFixed(5), name);
   } catch(e) { setStatus('Could not look up location. Try again.', true); }
@@ -731,7 +732,7 @@ function geoLocate() {
     try {
       const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
       const d = await res.json();
-      name = d.address.city || d.address.town || d.address.county || d.address.state || name;
+      name = d.address.city || d.address.town || d.address.village || d.address.municipality || d.address.county || d.address.state || d.address.country || name;
     } catch(e) {}
     document.getElementById('loc-input').value = name;
     fetchAll(lat, lng, name);
