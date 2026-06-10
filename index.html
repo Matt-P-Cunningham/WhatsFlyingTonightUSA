@@ -5,353 +5,254 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>What's Flying Tonight — USA Moths</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f0;--surface:#fff;--border:#e2e0da;--text:#1a1a18;--muted:#6b6960;
+  --accent:#3d6b2e;--accent-light:#eaf3de;--accent-text:#2a4d1f;
+  --amber:#854f0b;--amber-light:#faeeda;--amber-text:#633806;
+  --gray-light:#f1efe8;--gray-text:#5f5e5a;
+  --info:#185fa5;--info-light:#e6f1fb;
+  --danger:#a32d2d;--danger-light:#fcebeb;
+  --purple:#534ab7;--purple-light:#eeedfe;--purple-text:#3c3489;
+  --radius:10px;--radius-sm:6px;--radius-lg:14px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
-  :root {
-    --bg: #f8f7f4;
-    --surface: #ffffff;
-    --border: #e2e0da;
-    --text: #1a1a18;
-    --muted: #6b6960;
-    --accent: #3d6b2e;
-    --accent-light: #eaf3de;
-    --accent-text: #2a4d1f;
-    --amber: #854f0b;
-    --amber-light: #faeeda;
-    --gray-light: #f1efe8;
-    --gray-text: #5f5e5a;
-    --info: #185fa5;
-    --danger: #a32d2d;
-    --danger-light: #fcebeb;
-    --radius: 10px;
-    --radius-sm: 6px;
-  }
+/* HEADER */
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:sticky;top:0;z-index:100}
+.header-left{display:flex;align-items:center;gap:12px}
+.header-left h1{font-size:19px;font-weight:700;letter-spacing:-0.4px}
+.header-left p{font-size:12px;color:var(--muted);margin-top:1px}
+.moon-phase-pill{display:flex;align-items:center;gap:8px;background:var(--gray-light);border:1px solid var(--border);border-radius:99px;padding:6px 14px;font-size:13px;white-space:nowrap}
+.moon-phase-pill .moon-icon{font-size:20px}
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 0;
-  }
+/* MAIN */
+main{max-width:1140px;margin:0 auto;padding:1.5rem}
 
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 1.25rem 2rem;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+/* SEARCH */
+.search-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1.25rem}
+.search-row{display:flex;gap:8px;flex-wrap:wrap}
+.search-row input{flex:1;min-width:200px;height:40px;border:1px solid var(--border);border-radius:var(--radius-sm);padding:0 12px;font-size:14px;background:var(--bg);color:var(--text);outline:none;transition:border-color .15s}
+.search-row input:focus{border-color:var(--accent)}
+.btn{height:40px;padding:0 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:background .15s,border-color .15s;font-family:inherit}
+.btn:hover{background:var(--bg);border-color:#aaa}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:500}
+.btn-primary:hover{background:var(--accent-text);border-color:var(--accent-text)}
+.btn-sm{height:32px;padding:0 12px;font-size:13px}
 
-  header .moon { font-size: 28px; }
+/* NIGHT CONDITIONS STRIP */
+.conditions{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.25rem}
+.cond-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.cond-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
+.cond-value{font-size:22px;font-weight:700;color:var(--text);line-height:1.2}
+.cond-sub{font-size:12px;color:var(--muted)}
+.cond-rating{display:flex;gap:3px;margin-top:4px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.dot.on{background:var(--accent)}
+.dot.warn{background:#ef9f27}
+.dot.bad{background:#e24b4a}
 
-  header h1 {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: -0.3px;
-  }
+/* LIKELIHOOD SCORE */
+.likelihood-banner{background:linear-gradient(135deg,#1a3a10,#3d6b2e);color:#fff;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.likelihood-banner.poor{background:linear-gradient(135deg,#3a1a10,#6b2e1d)}
+.likelihood-banner.fair{background:linear-gradient(135deg,#2e2a10,#5f4a0a)}
+.likelihood-left h2{font-size:28px;font-weight:800;margin-bottom:2px}
+.likelihood-left p{font-size:14px;opacity:0.85}
+.likelihood-score{font-size:56px;font-weight:900;opacity:0.95;line-height:1}
+.likelihood-score span{font-size:20px;font-weight:400;opacity:0.7}
 
-  header p {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
+/* STATUS */
+.status-bar{margin-top:12px;padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;background:var(--gray-light);color:var(--muted);display:none}
+.status-bar.error{background:var(--danger-light);color:var(--danger)}
 
-  main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem;
-  }
+/* CONTROLS */
+.controls-row{display:flex;align-items:center;gap:10px;margin-bottom:1rem;flex-wrap:wrap}
+.controls-row label{font-size:13px;color:var(--muted)}
+.controls-row select{height:34px;padding:0 10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;font-family:inherit}
+.view-toggle{margin-left:auto;display:flex;gap:4px}
+.view-btn{width:34px;height:34px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .15s}
+.view-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.result-count{font-size:13px;color:var(--muted)}
 
-  .search-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1.5rem;
-  }
+/* MOTH GRID */
+.moth-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
+.moth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:box-shadow .15s,transform .15s}
+.moth-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.1);transform:translateY(-2px)}
+.moth-img{width:100%;aspect-ratio:4/3;background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:40px;overflow:hidden;position:relative}
+.moth-img img{width:100%;height:100%;object-fit:cover;display:block}
+.moth-likelihood{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.65);color:#fff;font-size:11px;font-weight:700;padding:3px 7px;border-radius:99px;backdrop-filter:blur(4px)}
+.moth-body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
+.moth-common{font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.moth-sci{font-size:11px;color:var(--muted);font-style:italic}
+.moth-season{display:flex;gap:2px;margin:4px 0}
+.season-bar{flex:1;height:4px;border-radius:2px;background:var(--border)}
+.season-bar.active{background:var(--accent)}
+.season-bar.peak{background:#1d9e75}
+.moth-footer{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.moth-obs{font-size:11px;color:var(--muted)}
+.badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:0.3px}
+.badge-common{background:var(--accent-light);color:var(--accent-text)}
+.badge-occasional{background:var(--amber-light);color:var(--amber-text)}
+.badge-rare{background:var(--gray-light);color:var(--gray-text)}
+.moth-actions{display:flex;gap:6px;margin-top:8px}
+.moth-link{font-size:11px;color:var(--info);text-decoration:none;flex:1}
+.moth-link:hover{text-decoration:underline}
+.share-btn{font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;font-family:inherit}
+.share-btn:hover{color:var(--text)}
 
-  .search-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+/* MOTH LIST VIEW */
+.moth-list{display:flex;flex-direction:column;gap:8px}
+.moth-list-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer;transition:box-shadow .15s}
+.moth-list-item:hover{box-shadow:0 2px 12px rgba(0,0,0,0.07)}
+.list-img{width:56px;height:56px;border-radius:var(--radius-sm);background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden;flex-shrink:0}
+.list-img img{width:100%;height:100%;object-fit:cover}
+.list-body{flex:1;min-width:0}
+.list-name{font-size:14px;font-weight:700}
+.list-sci{font-size:12px;color:var(--muted);font-style:italic}
+.list-season{display:flex;gap:2px;margin-top:4px;width:120px}
+.list-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.list-score{font-size:18px;font-weight:800;color:var(--accent)}
+.list-score.poor{color:var(--muted)}
 
-  .search-row input {
-    flex: 1;
-    min-width: 200px;
-    height: 40px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 0 12px;
-    font-size: 14px;
-    background: var(--bg);
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.15s;
-  }
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+.modal{background:var(--surface);border-radius:var(--radius-lg);max-width:560px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--radius-lg) var(--radius-lg) 0 0;background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:64px;overflow:hidden}
+.modal-img img{width:100%;height:100%;object-fit:cover}
+.modal-body{padding:1.5rem}
+.modal-close{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.4);color:#fff;border:none;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-title{font-size:22px;font-weight:800;margin-bottom:2px}
+.modal-sci{font-size:14px;color:var(--muted);font-style:italic;margin-bottom:1rem}
+.modal-score-row{display:flex;align-items:center;gap:12px;margin-bottom:1rem;padding:12px 16px;background:var(--accent-light);border-radius:var(--radius);border-left:4px solid var(--accent)}
+.modal-score-num{font-size:36px;font-weight:900;color:var(--accent-text)}
+.modal-score-label{font-size:13px;color:var(--accent-text)}
+.modal-section{margin-bottom:1rem}
+.modal-section h3{font-size:12px;text-transform:uppercase;letter-spacing:0.6px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.modal-season-row{display:flex;gap:4px;align-items:center}
+.modal-month{flex:1;text-align:center;font-size:10px;color:var(--muted)}
+.modal-bar-wrap{display:flex;gap:4px;flex:1}
+.modal-bar{flex:1;height:8px;border-radius:4px;background:var(--border)}
+.modal-bar.active{background:var(--accent)}
+.modal-bar.peak{background:#1d9e75}
+.modal-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.modal-stat{background:var(--gray-light);border-radius:var(--radius-sm);padding:10px 12px}
+.modal-stat-label{font-size:11px;color:var(--muted);margin-bottom:2px}
+.modal-stat-value{font-size:16px;font-weight:700}
+.modal-links{display:flex;gap:8px;flex-wrap:wrap}
+.modal-link{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--info);text-decoration:none;background:var(--info-light);padding:6px 12px;border-radius:99px}
+.modal-link:hover{text-decoration:underline}
 
-  .search-row input:focus { border-color: var(--accent); }
+/* SKELETON */
+.skeleton{background:var(--gray-light);border-radius:var(--radius);height:240px;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.45}}
 
-  .btn {
-    height: 40px;
-    padding: 0 16px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    font-size: 14px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-    transition: background 0.15s, border-color 0.15s;
-  }
+/* EMPTY */
+.empty{grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);font-size:15px;line-height:1.8}
+.empty .emoji{font-size:40px;display:block;margin-bottom:12px}
 
-  .btn:hover { background: var(--bg); border-color: #aaa; }
+/* FOOTER */
+footer{margin-top:3rem;padding:1.5rem;text-align:center;font-size:12px;color:var(--muted);border-top:1px solid var(--border)}
+footer a{color:var(--info)}
 
-  .btn-primary {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-    font-weight: 500;
-  }
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a18;color:#fff;padding:10px 20px;border-radius:99px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
 
-  .btn-primary:hover { background: var(--accent-text); border-color: var(--accent-text); }
-
-  .status-bar {
-    margin-top: 12px;
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    background: var(--gray-light);
-    color: var(--muted);
-    display: none;
-  }
-
-  .status-bar.error {
-    background: var(--danger-light);
-    color: var(--danger);
-  }
-
-  .controls {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .controls label { font-size: 13px; color: var(--muted); }
-
-  .controls select {
-    height: 34px;
-    padding: 0 10px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    font-size: 13px;
-    cursor: pointer;
-  }
-
-  .result-count {
-    margin-left: auto;
-    font-size: 13px;
-    color: var(--muted);
-  }
-
-  .moth-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    gap: 14px;
-  }
-
-  .moth-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: box-shadow 0.15s, transform 0.15s;
-  }
-
-  .moth-card:hover {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    transform: translateY(-2px);
-  }
-
-  .moth-img {
-    width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
-    background: var(--gray-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
-  }
-
-  .moth-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .moth-body {
-    padding: 10px 12px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
-  }
-
-  .moth-common {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.3;
-  }
-
-  .moth-sci {
-    font-size: 12px;
-    color: var(--muted);
-    font-style: italic;
-    line-height: 1.3;
-  }
-
-  .moth-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 8px;
-  }
-
-  .moth-obs {
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  .badge {
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 7px;
-    border-radius: 99px;
-    letter-spacing: 0.3px;
-  }
-
-  .badge-common { background: var(--accent-light); color: var(--accent-text); }
-  .badge-occasional { background: var(--amber-light); color: var(--amber); }
-  .badge-rare { background: var(--gray-light); color: var(--gray-text); }
-
-  .moth-link {
-    display: block;
-    margin-top: 8px;
-    font-size: 11px;
-    color: var(--info);
-    text-decoration: none;
-  }
-
-  .moth-link:hover { text-decoration: underline; }
-
-  .skeleton {
-    background: var(--gray-light);
-    border-radius: var(--radius);
-    height: 240px;
-    animation: pulse 1.4s ease-in-out infinite;
-  }
-
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
-
-  .empty {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 3rem;
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.8;
-  }
-
-  .empty .emoji { font-size: 40px; display: block; margin-bottom: 12px; }
-
-  footer {
-    margin-top: 3rem;
-    padding: 1.5rem;
-    text-align: center;
-    font-size: 12px;
-    color: var(--muted);
-    border-top: 1px solid var(--border);
-  }
-
-  footer a { color: var(--info); }
-
-  @media (max-width: 600px) {
-    header { padding: 1rem; }
-    main { padding: 1rem; }
-    .moth-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  }
+@media(max-width:600px){
+  header{padding:.75rem 1rem}
+  main{padding:1rem}
+  .moth-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .conditions{grid-template-columns:repeat(2,1fr)}
+  .likelihood-banner{padding:1rem}
+  .likelihood-score{font-size:40px}
+}
 </style>
 </head>
 <body>
 
 <header>
-  <span class="moon">🌕</span>
-  <div>
-    <h1>What's Flying Tonight?</h1>
-    <p>Moths recorded near you at this time of year · USA · Powered by iNaturalist</p>
+  <div class="header-left">
+    <div>
+      <h1 id="header-moon">🌕 What's Flying Tonight?</h1>
+      <p>USA moths · powered by iNaturalist · <span id="header-date"></span></p>
+    </div>
+  </div>
+  <div class="moon-phase-pill" id="moon-pill" style="display:none">
+    <span class="moon-icon" id="moon-icon-pill">🌕</span>
+    <div>
+      <div style="font-size:13px;font-weight:600" id="moon-name-pill">Full Moon</div>
+      <div style="font-size:11px;color:var(--muted)" id="moon-illum-pill">100% illuminated</div>
+    </div>
   </div>
 </header>
 
 <main>
-  <div class="search-section">
+  <div class="search-card">
     <div class="search-row">
       <input type="text" id="loc-input" placeholder="Enter city, state or ZIP code…" />
       <button class="btn btn-primary" onclick="searchByText()">🔍 Search</button>
-      <button class="btn" onclick="geoLocate()">📍 Use my location</button>
+      <button class="btn" onclick="geoLocate()">📍 My location</button>
     </div>
     <div class="status-bar" id="status"></div>
   </div>
 
-  <div id="controls-row" style="display:none;" class="controls">
-    <label for="sort-sel">Sort:</label>
-    <select id="sort-sel" onchange="renderMoths()">
-      <option value="count">Most observed</option>
-      <option value="alpha">Name A–Z</option>
-    </select>
-    <label for="fam-sel" style="margin-left:8px;">Family:</label>
-    <select id="fam-sel" onchange="renderMoths()">
-      <option value="">All families</option>
-    </select>
-    <span class="result-count" id="result-count"></span>
+  <div id="conditions-section" style="display:none">
+    <div class="conditions" id="conditions-grid"></div>
+    <div class="likelihood-banner" id="likelihood-banner">
+      <div class="likelihood-left">
+        <h2 id="likelihood-label">Excellent night for moths</h2>
+        <p id="likelihood-desc">Warm, calm, and dark — ideal conditions</p>
+      </div>
+      <div class="likelihood-score" id="likelihood-score">92<span>/100</span></div>
+    </div>
   </div>
 
-  <div class="moth-grid" id="results"></div>
+  <div id="controls-section" style="display:none">
+    <div class="controls-row">
+      <label>Sort:</label>
+      <select id="sort-sel" onchange="renderMoths()">
+        <option value="score">Flight likelihood</option>
+        <option value="count">Most observed</option>
+        <option value="alpha">Name A–Z</option>
+      </select>
+      <label style="margin-left:8px">Family:</label>
+      <select id="fam-sel" onchange="renderMoths()">
+        <option value="">All families</option>
+      </select>
+      <span class="result-count" id="result-count"></span>
+      <div class="view-toggle">
+        <button class="view-btn active" id="btn-grid" onclick="setView('grid')" title="Grid view">⊞</button>
+        <button class="view-btn" id="btn-list" onclick="setView('list')" title="List view">☰</button>
+      </div>
+    </div>
+    <div id="results"></div>
+  </div>
 </main>
 
 <footer>
-  Data from <a href="https://www.inaturalist.org" target="_blank">iNaturalist</a> (research-grade observations) ·
-  Location lookup via <a href="https://nominatim.openstreetmap.org" target="_blank">Nominatim / OpenStreetMap</a> ·
-  Inspired by <a href="https://connect-apps.ceh.ac.uk/whats_flying_tonight/" target="_blank">CEH's What's Flying Tonight</a>
+  Data: <a href="https://www.inaturalist.org" target="_blank">iNaturalist</a> (research-grade) ·
+  Weather: <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> ·
+  Location: <a href="https://nominatim.openstreetmap.org" target="_blank">OpenStreetMap</a> ·
+  Inspired by <a href="https://connect-apps.ceh.ac.uk/whats_flying_tonight/" target="_blank">CEH What's Flying Tonight</a>
 </footer>
 
+<div class="toast" id="toast"></div>
+
 <script>
+// ─── Constants ───────────────────────────────────────────────────
 const MOTH_TAXON_ID = 47157;
+const BUTTERFLY_TAXON_ID = 47224;
 const RADIUS_KM = 80;
 const WINDOW_DAYS = 14;
+const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
 let allMoths = [];
+let weather = null;
+let moonData = null;
+let currentLat = null, currentLng = null, currentName = '';
+let currentView = 'grid';
 
-function setStatus(msg, isError) {
-  const el = document.getElementById('status');
-  el.style.display = msg ? 'block' : 'none';
-  el.className = 'status-bar' + (isError ? ' error' : '');
-  el.textContent = msg;
-}
-
+// ─── Date helpers ────────────────────────────────────────────────
 function getMonths() {
   const now = new Date();
   const months = new Set();
@@ -363,11 +264,367 @@ function getMonths() {
   return [...months].join(',');
 }
 
-function showSkeletons() {
-  const r = document.getElementById('results');
-  r.innerHTML = Array(12).fill('<div class="skeleton"></div>').join('');
+function todayStr() {
+  const now = new Date();
+  return now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
 }
 
+// ─── Moon phase ──────────────────────────────────────────────────
+function getMoonPhase() {
+  const now = new Date();
+  const known = new Date('2000-01-06T18:14:00Z'); // known new moon
+  const diff = (now - known) / (1000 * 60 * 60 * 24);
+  const cycle = 29.53059;
+  const phase = ((diff % cycle) + cycle) % cycle;
+  const illum = Math.round((1 - Math.cos(2 * Math.PI * phase / cycle)) / 2 * 100);
+  let name, icon;
+  if (phase < 1.85) { name = 'New Moon'; icon = '🌑'; }
+  else if (phase < 7.38) { name = 'Waxing Crescent'; icon = '🌒'; }
+  else if (phase < 9.22) { name = 'First Quarter'; icon = '🌓'; }
+  else if (phase < 14.77) { name = 'Waxing Gibbous'; icon = '🌔'; }
+  else if (phase < 16.61) { name = 'Full Moon'; icon = '🌕'; }
+  else if (phase < 22.15) { name = 'Waning Gibbous'; icon = '🌖'; }
+  else if (phase < 23.99) { name = 'Last Quarter'; icon = '🌗'; }
+  else if (phase < 29.53) { name = 'Waning Crescent'; icon = '🌘'; }
+  else { name = 'New Moon'; icon = '🌑'; }
+  // darkness score: new moon = best for moths
+  const darkScore = Math.round((1 - illum / 100) * 100);
+  return { phase, illum, name, icon, darkScore };
+}
+
+// ─── Weather ─────────────────────────────────────────────────────
+async function fetchWeather(lat, lng) {
+  try {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}` +
+      `&current=temperature_2m,wind_speed_10m,cloud_cover,precipitation` +
+      `&hourly=temperature_2m&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=1`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const c = data.current;
+    return {
+      temp: Math.round(c.temperature_2m),
+      wind: Math.round(c.wind_speed_10m),
+      clouds: Math.round(c.cloud_cover),
+      precip: c.precipitation
+    };
+  } catch(e) { return null; }
+}
+
+// ─── Likelihood scoring ──────────────────────────────────────────
+function calcNightScore(w, moon) {
+  if (!w || !moon) return { score: 50, label: 'Unknown', desc: 'Weather data unavailable', level: 'fair' };
+  let score = 0;
+  // Temperature (moths active above ~50°F, peak 65-80°F)
+  if (w.temp >= 65 && w.temp <= 80) score += 35;
+  else if (w.temp >= 55 && w.temp < 65) score += 25;
+  else if (w.temp >= 50 && w.temp < 55) score += 12;
+  else if (w.temp < 50) score += 0;
+  else score += 20; // >80
+  // Wind (calm is better, <10mph ideal)
+  if (w.wind < 5) score += 25;
+  else if (w.wind < 10) score += 18;
+  else if (w.wind < 15) score += 10;
+  else score += 0;
+  // Moon darkness
+  score += Math.round(moon.darkScore * 0.25);
+  // Rain
+  if (w.precip > 0) score = Math.round(score * 0.3);
+  // Clouds (mild cloud ok, heavy bad)
+  if (w.clouds > 80 && w.precip === 0) score = Math.round(score * 0.85);
+
+  score = Math.min(100, Math.max(0, score));
+
+  let label, desc, level;
+  if (w.precip > 0) { label = 'Poor — rain expected'; desc = 'Moths shelter during rain'; level = 'poor'; }
+  else if (score >= 80) { label = 'Excellent night for moths'; desc = 'Warm, calm & dark — ideal conditions'; level = 'good'; }
+  else if (score >= 60) { label = 'Good night for moths'; desc = 'Conditions are favorable'; level = 'good'; }
+  else if (score >= 40) { label = 'Fair night for moths'; desc = 'Some moths will be flying'; level = 'fair'; }
+  else { label = 'Poor night for moths'; desc = w.temp < 50 ? 'Too cold for most species' : 'Unfavorable conditions'; level = 'poor'; }
+  return { score, label, desc, level };
+}
+
+function calcMothScore(moth, nightScore) {
+  // Combine species commonness with night conditions
+  const commonScore = Math.min(100, Math.round(Math.log10(moth.count + 1) * 40));
+  return Math.round((commonScore * 0.4) + (nightScore * 0.6));
+}
+
+// ─── Season bars ─────────────────────────────────────────────────
+function seasonBars(peakMonths) {
+  // peakMonths: array of 1-12 that are active/peak
+  const now = new Date().getMonth() + 1;
+  return MONTHS_SHORT.map((m, i) => {
+    const mo = i + 1;
+    const isCurrent = mo === now;
+    const cls = peakMonths.includes(mo) ? (isCurrent ? 'peak' : 'active') : '';
+    return `<div class="season-bar ${cls}" title="${m}"></div>`;
+  }).join('');
+}
+
+// Rough season estimate from observation month data (simplified)
+function estimateSeasonMonths(moth) {
+  // Use a rough heuristic — most moths have a 3-5 month season
+  // centered around the current window months
+  const now = new Date().getMonth() + 1;
+  const active = [];
+  for (let i = -2; i <= 3; i++) {
+    let m = ((now - 1 + i + 12) % 12) + 1;
+    active.push(m);
+  }
+  const peak = [now, ((now % 12) + 1)];
+  return { active, peak };
+}
+
+// ─── Render conditions strip ─────────────────────────────────────
+function renderConditions(w, moon, nightResult) {
+  const grid = document.getElementById('conditions-grid');
+
+  const tempDots = w ? [
+    w.temp >= 50 ? 'on' : 'bad',
+    w.temp >= 60 ? 'on' : (w.temp >= 50 ? 'warn' : 'bad'),
+    w.temp >= 70 ? 'on' : (w.temp >= 60 ? 'warn' : 'bad'),
+  ] : ['bad','bad','bad'];
+
+  const windDots = w ? [
+    w.wind < 15 ? 'on' : 'bad',
+    w.wind < 10 ? 'on' : (w.wind < 15 ? 'warn' : 'bad'),
+    w.wind < 5 ? 'on' : (w.wind < 10 ? 'warn' : 'bad'),
+  ] : ['bad','bad','bad'];
+
+  const moonDots = [
+    moon.darkScore >= 20 ? 'on' : 'warn',
+    moon.darkScore >= 50 ? 'on' : (moon.darkScore >= 20 ? 'warn' : 'bad'),
+    moon.darkScore >= 75 ? 'on' : (moon.darkScore >= 50 ? 'warn' : 'bad'),
+  ];
+
+  grid.innerHTML = `
+    <div class="cond-card">
+      <div class="cond-label">🌡 Temperature</div>
+      <div class="cond-value">${w ? w.temp + '°F' : '—'}</div>
+      <div class="cond-sub">${w ? (w.temp >= 65 ? 'Ideal' : w.temp >= 50 ? 'Acceptable' : 'Too cold') : 'unavailable'}</div>
+      <div class="cond-rating">${tempDots.map(d=>`<div class="dot ${d}"></div>`).join('')}</div>
+    </div>
+    <div class="cond-card">
+      <div class="cond-label">💨 Wind</div>
+      <div class="cond-value">${w ? w.wind + ' mph' : '—'}</div>
+      <div class="cond-sub">${w ? (w.wind < 5 ? 'Calm — ideal' : w.wind < 10 ? 'Light breeze' : w.wind < 15 ? 'Moderate' : 'Too windy') : 'unavailable'}</div>
+      <div class="cond-rating">${windDots.map(d=>`<div class="dot ${d}"></div>`).join('')}</div>
+    </div>
+    <div class="cond-card">
+      <div class="cond-label">${moon.icon} Moon</div>
+      <div class="cond-value" style="font-size:16px;padding-top:4px">${moon.name}</div>
+      <div class="cond-sub">${moon.illum}% lit · ${moon.darkScore >= 75 ? 'Very dark' : moon.darkScore >= 50 ? 'Fairly dark' : moon.darkScore >= 25 ? 'Some light' : 'Bright night'}</div>
+      <div class="cond-rating">${moonDots.map(d=>`<div class="dot ${d}"></div>`).join('')}</div>
+    </div>
+    <div class="cond-card">
+      <div class="cond-label">🌧 Precipitation</div>
+      <div class="cond-value">${w ? (w.precip > 0 ? w.precip.toFixed(1) + '"' : 'None') : '—'}</div>
+      <div class="cond-sub">${w ? (w.precip > 0 ? 'Moths will shelter' : 'Clear — good') : 'unavailable'}</div>
+      <div class="cond-rating"><div class="dot ${w && w.precip === 0 ? 'on' : 'bad'}"></div><div class="dot ${w && w.precip === 0 ? 'on' : 'bad'}"></div><div class="dot ${w && w.precip === 0 ? 'on' : 'bad'}"></div></div>
+    </div>
+  `;
+
+  const banner = document.getElementById('likelihood-banner');
+  banner.className = 'likelihood-banner ' + (nightResult.level === 'good' ? '' : nightResult.level);
+  document.getElementById('likelihood-label').textContent = nightResult.label;
+  document.getElementById('likelihood-desc').textContent = nightResult.desc;
+  document.getElementById('likelihood-score').innerHTML = nightResult.score + '<span>/100</span>';
+
+  document.getElementById('conditions-section').style.display = 'block';
+}
+
+// ─── Render moths ─────────────────────────────────────────────────
+function renderMoths() {
+  const sort = document.getElementById('sort-sel').value;
+  const fam = document.getElementById('fam-sel').value;
+  let moths = [...allMoths];
+  if (fam) moths = moths.filter(m => m.family === fam);
+
+  const nightScore = moonData && weather ? calcNightScore(weather, moonData).score : 50;
+  moths.forEach(m => m.flightScore = calcMothScore(m, nightScore));
+
+  if (sort === 'score') moths.sort((a,b) => b.flightScore - a.flightScore);
+  else if (sort === 'count') moths.sort((a,b) => b.count - a.count);
+  else moths.sort((a,b) => a.name.localeCompare(b.name));
+
+  document.getElementById('result-count').textContent = `${moths.length} species`;
+  const r = document.getElementById('results');
+  if (!moths.length) {
+    r.innerHTML = '<div class="empty"><span class="emoji">🔍</span>No moths match this filter.</div>';
+    return;
+  }
+
+  if (currentView === 'grid') renderGrid(moths, r);
+  else renderList(moths, r);
+}
+
+function renderGrid(moths, container) {
+  container.innerHTML = '<div class="moth-grid">' + moths.map(m => {
+    const { active, peak } = estimateSeasonMonths(m);
+    const badge = m.count > 100 ? '<span class="badge badge-common">Common</span>'
+      : m.count > 20 ? '<span class="badge badge-occasional">Occasional</span>'
+      : '<span class="badge badge-rare">Rare</span>';
+    const img = m.photo
+      ? `<img src="${m.photo}" alt="${m.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:40px>🦋</span>'">`
+      : '<span style="font-size:40px">🦋</span>';
+    const scoreColor = m.flightScore >= 70 ? 'var(--accent)' : m.flightScore >= 45 ? '#ef9f27' : '#888';
+    return `<div class="moth-card" onclick="openModal(${m.id})">
+      <div class="moth-img">
+        ${img}
+        <div class="moth-likelihood" style="background:rgba(0,0,0,0.6)">${m.flightScore}%</div>
+      </div>
+      <div class="moth-body">
+        <div class="moth-common">${m.name}</div>
+        <div class="moth-sci">${m.sci}</div>
+        <div class="moth-season">${seasonBars([...active,...peak])}</div>
+        <div class="moth-footer">
+          <span class="moth-obs">👁 ${m.count.toLocaleString()}</span>
+          ${badge}
+        </div>
+        <div class="moth-actions">
+          <a class="moth-link" href="https://www.inaturalist.org/taxa/${m.id}" target="_blank" onclick="event.stopPropagation()">iNaturalist →</a>
+          <button class="share-btn" onclick="event.stopPropagation();shareMoth(${m.id},'${encodeURIComponent(m.name)}')">🔗 Share</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function renderList(moths, container) {
+  container.innerHTML = '<div class="moth-list">' + moths.map(m => {
+    const { active, peak } = estimateSeasonMonths(m);
+    const img = m.photo
+      ? `<img src="${m.photo}" alt="${m.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:24px>🦋</span>'">`
+      : '<span style="font-size:24px">🦋</span>';
+    const badge = m.count > 100 ? '<span class="badge badge-common">Common</span>'
+      : m.count > 20 ? '<span class="badge badge-occasional">Occasional</span>'
+      : '<span class="badge badge-rare">Rare</span>';
+    const scoreClass = m.flightScore >= 60 ? '' : 'poor';
+    return `<div class="moth-list-item" onclick="openModal(${m.id})">
+      <div class="list-img">${img}</div>
+      <div class="list-body">
+        <div class="list-name">${m.name}</div>
+        <div class="list-sci">${m.sci}</div>
+        <div class="list-season">${seasonBars([...active,...peak])}</div>
+      </div>
+      <div class="list-right">
+        <div class="list-score ${scoreClass}">${m.flightScore}%</div>
+        ${badge}
+        <span style="font-size:11px;color:var(--muted)">👁 ${m.count.toLocaleString()}</span>
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('btn-grid').classList.toggle('active', v === 'grid');
+  document.getElementById('btn-list').classList.toggle('active', v === 'list');
+  renderMoths();
+}
+
+// ─── Modal ───────────────────────────────────────────────────────
+function openModal(taxonId) {
+  const m = allMoths.find(x => x.id === taxonId);
+  if (!m) return;
+  const { active, peak } = estimateSeasonMonths(m);
+  const nightScore = moonData && weather ? calcNightScore(weather, moonData).score : 50;
+  const fs = calcMothScore(m, nightScore);
+  const scoreColor = fs >= 70 ? 'var(--accent)' : fs >= 45 ? '#ef9f27' : 'var(--muted)';
+
+  const img = m.photo
+    ? `<div class="modal-img"><img src="${m.photo}" alt="${m.name}"></div>`
+    : `<div class="modal-img">🦋</div>`;
+
+  const html = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      ${img}
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-body">
+        <div class="modal-title">${m.name}</div>
+        <div class="modal-sci">${m.sci}</div>
+        <div class="modal-score-row">
+          <div class="modal-score-num" style="color:${scoreColor}">${fs}%</div>
+          <div class="modal-score-label">estimated flight<br>likelihood tonight</div>
+        </div>
+        <div class="modal-section">
+          <h3>Flight season (estimated)</h3>
+          <div class="modal-bar-wrap">${MONTHS_SHORT.map((mo,i)=>{
+            const mn=i+1;
+            const cls=peak.includes(mn)?'peak':active.includes(mn)?'active':'';
+            return `<div class="modal-bar ${cls}" title="${mo}"></div>`;
+          }).join('')}</div>
+          <div style="display:flex;gap:0;margin-top:4px">${MONTHS_SHORT.map(mo=>`<div style="flex:1;text-align:center;font-size:9px;color:var(--muted)">${mo[0]}</div>`).join('')}</div>
+        </div>
+        <div class="modal-section">
+          <h3>Observation data</h3>
+          <div class="modal-stats">
+            <div class="modal-stat"><div class="modal-stat-label">Records near you</div><div class="modal-stat-value">${m.count.toLocaleString()}</div></div>
+            <div class="modal-stat"><div class="modal-stat-label">Rarity</div><div class="modal-stat-value">${m.count>100?'Common':m.count>20?'Occasional':'Rare'}</div></div>
+          </div>
+        </div>
+        <div class="modal-section">
+          <h3>Links</h3>
+          <div class="modal-links">
+            <a class="modal-link" href="https://www.inaturalist.org/taxa/${m.id}" target="_blank">📷 iNaturalist</a>
+            <a class="modal-link" href="https://www.butterfliesandmoths.org/search?field_bam_description_value=${encodeURIComponent(m.sci)}" target="_blank">🦋 B&amp;M of NA</a>
+            <a class="modal-link" href="https://bugguide.net/index.php?q=search&amp;keys=${encodeURIComponent(m.sci)}" target="_blank">🐛 BugGuide</a>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1rem">
+          <button class="btn btn-primary btn-sm" style="flex:1" onclick="shareMoth(${m.id},'${encodeURIComponent(m.name)}');closeModal()">🔗 Share this moth</button>
+          <button class="btn btn-sm" onclick="closeModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  document.body.insertAdjacentHTML('beforeend', html);
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const overlay = document.querySelector('.modal-overlay');
+  if (overlay) overlay.remove();
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ─── Share ───────────────────────────────────────────────────────
+function shareMoth(id, encodedName) {
+  const name = decodeURIComponent(encodedName);
+  const url = `https://www.inaturalist.org/taxa/${id}`;
+  const text = `Check out the ${name} — a moth that might be flying tonight near me! 🦋\n${url}`;
+  if (navigator.share) {
+    navigator.share({ title: name, text, url });
+  } else {
+    navigator.clipboard.writeText(text).then(() => showToast('Link copied to clipboard!'));
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ─── Status ──────────────────────────────────────────────────────
+function setStatus(msg, isError) {
+  const el = document.getElementById('status');
+  el.style.display = msg ? 'block' : 'none';
+  el.className = 'status-bar' + (isError ? ' error' : '');
+  el.textContent = msg;
+}
+
+function showSkeletons() {
+  document.getElementById('controls-section').style.display = 'block';
+  document.getElementById('results').innerHTML =
+    '<div class="moth-grid">' + Array(12).fill('<div class="skeleton"></div>').join('') + '</div>';
+}
+
+// ─── Families ────────────────────────────────────────────────────
 function populateFamilies() {
   const fams = [...new Set(allMoths.map(m => m.family).filter(Boolean))].sort();
   const sel = document.getElementById('fam-sel');
@@ -375,78 +632,69 @@ function populateFamilies() {
     fams.map(f => `<option value="${f}">${f}</option>`).join('');
 }
 
-function renderMoths() {
-  const sort = document.getElementById('sort-sel').value;
-  const fam = document.getElementById('fam-sel').value;
-  let moths = [...allMoths];
-  if (fam) moths = moths.filter(m => m.family === fam);
-  if (sort === 'count') moths.sort((a, b) => b.count - a.count);
-  else moths.sort((a, b) => a.name.localeCompare(b.name));
+// ─── Main fetch ──────────────────────────────────────────────────
+async function fetchAll(lat, lng, locationName) {
+  currentLat = lat; currentLng = lng; currentName = locationName;
 
-  document.getElementById('result-count').textContent = `${moths.length} species`;
+  // Save location
+  try { localStorage.setItem('wft_last', JSON.stringify({ lat, lng, name: locationName })); } catch(e){}
 
-  const r = document.getElementById('results');
-  if (!moths.length) {
-    r.innerHTML = '<div class="empty"><span class="emoji">🔍</span>No moths found for this filter.<br>Try a different family or clear the filter.</div>';
+  setStatus(`Loading moths and conditions for ${locationName}…`);
+  showSkeletons();
+  document.getElementById('conditions-section').style.display = 'none';
+
+  // Moon (instant)
+  moonData = getMoonPhase();
+  document.getElementById('moon-icon-pill').textContent = moonData.icon;
+  document.getElementById('moon-name-pill').textContent = moonData.name;
+  document.getElementById('moon-illum-pill').textContent = `${moonData.illum}% illuminated`;
+  document.getElementById('moon-pill').style.display = 'flex';
+  document.getElementById('header-moon').textContent = moonData.icon + ' What\'s Flying Tonight?';
+
+  // Fetch weather + moths in parallel
+  const [wData, mothData] = await Promise.all([
+    fetchWeather(lat, lng),
+    fetchMoths(lat, lng)
+  ]);
+
+  weather = wData;
+  const nightResult = calcNightScore(weather, moonData);
+  renderConditions(weather, moonData, nightResult);
+
+  if (!mothData) {
+    setStatus('Could not load iNaturalist data. Check your connection and try again.', true);
+    document.getElementById('results').innerHTML = '';
     return;
   }
 
-  r.innerHTML = moths.map(m => {
-    const badge = m.count > 50
-      ? '<span class="badge badge-common">Common</span>'
-      : m.count > 10
-        ? '<span class="badge badge-occasional">Occasional</span>'
-        : '<span class="badge badge-rare">Rare</span>';
+  allMoths = mothData;
+  if (!allMoths.length) {
+    setStatus('');
+    document.getElementById('results').innerHTML =
+      '<div class="empty"><span class="emoji">🌑</span>No moth records found near this location for this time of year.</div>';
+    return;
+  }
 
-    const imgContent = m.photo
-      ? `<img src="${m.photo}" alt="${m.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:40px>🦋</span>'">`
-      : '<span style="font-size:40px">🦋</span>';
+  const total = allMoths.reduce((s,m) => s + m.count, 0);
+  setStatus(`${allMoths.length} species · ${total.toLocaleString()} records · within ${RADIUS_KM}km of ${locationName}`);
 
-    return `<div class="moth-card">
-      <div class="moth-img">${imgContent}</div>
-      <div class="moth-body">
-        <div class="moth-common">${m.name}</div>
-        <div class="moth-sci">${m.sci}</div>
-        <div class="moth-footer">
-          <span class="moth-obs">👁 ${m.count.toLocaleString()} obs</span>
-          ${badge}
-        </div>
-        <a class="moth-link" href="https://www.inaturalist.org/taxa/${m.id}" target="_blank">View on iNaturalist →</a>
-      </div>
-    </div>`;
-  }).join('');
+  populateFamilies();
+  document.getElementById('controls-section').style.display = 'block';
+  renderMoths();
 }
 
-async function fetchMoths(lat, lng, locationName) {
-  setStatus(`Searching for moths near ${locationName}…`);
-  showSkeletons();
-  document.getElementById('controls-row').style.display = 'none';
-
-  const months = getMonths();
-  const BUTTERFLY_TAXON_ID = 47224;
-  const url = `https://api.inaturalist.org/v1/observations/species_counts` +
-    `?taxon_id=${MOTH_TAXON_ID}` +
-    `&without_taxon_id=${BUTTERFLY_TAXON_ID}` +
-    `&lat=${lat}&lng=${lng}&radius=${RADIUS_KM}` +
-    `&month=${months}` +
-    `&quality_grade=research` +
-    `&place_id=1` +
-    `&per_page=60&order=desc&order_by=observations_count`;
-
+async function fetchMoths(lat, lng) {
   try {
+    const months = getMonths();
+    const url = `https://api.inaturalist.org/v1/observations/species_counts` +
+      `?taxon_id=${MOTH_TAXON_ID}&without_taxon_id=${BUTTERFLY_TAXON_ID}` +
+      `&lat=${lat}&lng=${lng}&radius=${RADIUS_KM}` +
+      `&month=${months}&quality_grade=research&place_id=1` +
+      `&per_page=60&order=desc&order_by=observations_count`;
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error('API error');
     const data = await res.json();
-
-    if (!data.results || !data.results.length) {
-      allMoths = [];
-      document.getElementById('results').innerHTML =
-        '<div class="empty"><span class="emoji">🌑</span>No moth records found near this location for this time of year.<br>Try a different city or expand your search.</div>';
-      setStatus('');
-      return;
-    }
-
-    allMoths = data.results.map(r => ({
+    return (data.results || []).map(r => ({
       id: r.taxon.id,
       name: r.taxon.preferred_common_name || r.taxon.name,
       sci: r.taxon.name,
@@ -454,20 +702,10 @@ async function fetchMoths(lat, lng, locationName) {
       count: r.count,
       family: r.taxon.iconic_taxon_name || ''
     }));
-
-    const total = data.results.reduce((s, r) => s + r.count, 0);
-    setStatus(`${allMoths.length} moth species · ${total.toLocaleString()} total observations · within ${RADIUS_KM}km of ${locationName} · around this time of year`);
-
-    populateFamilies();
-    document.getElementById('controls-row').style.display = 'flex';
-    renderMoths();
-  } catch (e) {
-    console.error(e);
-    setStatus('Could not load data from iNaturalist. Check your internet connection and try again.', true);
-    document.getElementById('results').innerHTML = '';
-  }
+  } catch(e) { return null; }
 }
 
+// ─── Location ────────────────────────────────────────────────────
 async function searchByText() {
   const q = document.getElementById('loc-input').value.trim();
   if (!q) return;
@@ -475,24 +713,16 @@ async function searchByText() {
   try {
     const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q + ' USA')}&format=json&limit=1`);
     const data = await res.json();
-    if (!data.length) {
-      setStatus('Location not found. Try a city name, state, or ZIP code.', true);
-      return;
-    }
+    if (!data.length) { setStatus('Location not found. Try a city, state, or ZIP.', true); return; }
     const { lat, lon, display_name } = data[0];
-    const name = display_name.split(',').slice(0, 2).join(', ').trim();
+    const name = display_name.split(',').slice(0,2).join(', ').trim();
     document.getElementById('loc-input').value = name;
-    fetchMoths(parseFloat(lat).toFixed(5), parseFloat(lon).toFixed(5), name);
-  } catch (e) {
-    setStatus('Could not look up that location. Please try again.', true);
-  }
+    fetchAll(parseFloat(lat).toFixed(5), parseFloat(lon).toFixed(5), name);
+  } catch(e) { setStatus('Could not look up location. Try again.', true); }
 }
 
 function geoLocate() {
-  if (!navigator.geolocation) {
-    setStatus('Geolocation is not supported by your browser. Search by city name instead.', true);
-    return;
-  }
+  if (!navigator.geolocation) { setStatus('Geolocation not supported. Search by city name.', true); return; }
   setStatus('Getting your location…');
   navigator.geolocation.getCurrentPosition(async pos => {
     const lat = pos.coords.latitude.toFixed(5);
@@ -502,19 +732,24 @@ function geoLocate() {
       const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
       const d = await res.json();
       name = d.address.city || d.address.town || d.address.county || d.address.state || name;
-    } catch (e) {}
+    } catch(e) {}
     document.getElementById('loc-input').value = name;
-    fetchMoths(lat, lng, name);
-  }, () => {
-    setStatus('Could not get your location. Search by city name instead.', true);
-  });
+    fetchAll(lat, lng, name);
+  }, () => { setStatus('Could not get location. Search by city name instead.', true); });
 }
 
-document.getElementById('loc-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') searchByText();
-});
+// ─── Init ────────────────────────────────────────────────────────
+document.getElementById('header-date').textContent = todayStr();
+document.getElementById('loc-input').addEventListener('keydown', e => { if (e.key === 'Enter') searchByText(); });
 
-geoLocate();
+// Restore saved location or geolocate
+try {
+  const saved = JSON.parse(localStorage.getItem('wft_last'));
+  if (saved && saved.lat && saved.lng) {
+    document.getElementById('loc-input').value = saved.name;
+    fetchAll(saved.lat, saved.lng, saved.name);
+  } else { geoLocate(); }
+} catch(e) { geoLocate(); }
 </script>
 </body>
 </html>
