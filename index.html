@@ -150,6 +150,17 @@ main{max-width:1140px;margin:0 auto;padding:1.5rem}
 .empty{grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted);font-size:15px;line-height:1.8}
 .empty .emoji{font-size:40px;display:block;margin-bottom:12px}
 
+/* PRIVACY / ATTRIBUTION */
+.privacy-note{margin-top:12px;padding:10px 12px;border-radius:var(--radius-sm);background:var(--info-light);color:var(--muted);font-size:12px;line-height:1.45;border-left:3px solid var(--info)}
+.privacy-note strong{color:var(--text)}
+.photo-credit{font-size:10px;color:var(--muted);line-height:1.25;margin-top:4px}
+.photo-credit a{color:var(--info);text-decoration:none}
+.photo-credit a:hover{text-decoration:underline}
+.card-photo-credit{min-height:13px;max-height:28px;overflow:hidden}
+.modal-photo-credit{font-size:11px;margin-bottom:12px;background:var(--gray-light);padding:8px 10px;border-radius:var(--radius-sm)}
+.source-note{max-width:860px;margin:0 auto;line-height:1.55}
+.source-note p{margin:4px 0}
+
 /* FOOTER */
 footer{margin-top:3rem;padding:1.5rem;text-align:center;font-size:12px;color:var(--muted);border-top:1px solid var(--border)}
 footer a{color:var(--info)}
@@ -192,7 +203,9 @@ footer a{color:var(--info)}
       <input type="text" id="loc-input" placeholder="Enter city, region/country, or postal code…" />
       <button class="btn btn-primary" onclick="searchByText()">🔍 Search</button>
       <button class="btn" onclick="geoLocate()">📍 My location</button>
+      <button class="btn" onclick="clearSavedLocation()">Forget saved</button>
     </div>
+    <p class="privacy-note"><strong>Location/privacy:</strong> searches and browser-provided coordinates are sent to iNaturalist, Open-Meteo, and OpenStreetMap/Nominatim to retrieve moth, weather, and place data. Your last selected location is saved only in this browser using localStorage; use “Forget saved” to remove it.</p>
     <div class="status-bar" id="status"></div>
   </div>
 
@@ -230,10 +243,11 @@ footer a{color:var(--info)}
 </main>
 
 <footer>
-  Data: <a href="https://www.inaturalist.org" target="_blank">iNaturalist</a> global research-grade observations ·
-  Weather: <a href="https://open-meteo.com" target="_blank">Open-Meteo</a> ·
-  Location: <a href="https://nominatim.openstreetmap.org" target="_blank">OpenStreetMap</a> ·
-  Inspired by <a href="https://connect-apps.ceh.ac.uk/whats_flying_tonight/" target="_blank">CEH What's Flying Tonight</a>
+  <div class="source-note">
+    <p>Observation data: <a href="https://www.inaturalist.org" target="_blank" rel="noopener noreferrer">iNaturalist</a> global research-grade species counts. Photos, when shown, are Creative Commons-licensed iNaturalist taxon photos and remain owned by their photographers.</p>
+    <p>Weather data: <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a>. Location search: <a href="https://nominatim.openstreetmap.org" target="_blank" rel="noopener noreferrer">OpenStreetMap/Nominatim</a>. Inspired by <a href="https://connect-apps.ceh.ac.uk/whats_flying_tonight/" target="_blank" rel="noopener noreferrer">CEH What's Flying Tonight</a>.</p>
+    <p>This tool is an estimate only: flight likelihood combines current weather/moon conditions with nearby seasonal iNaturalist observation counts.</p>
+  </div>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -251,6 +265,60 @@ let weather = null;
 let moonData = null;
 let currentLat = null, currentLng = null, currentName = '';
 let currentView = 'grid';
+
+// ─── Safety / licensing helpers ──────────────────────────────────
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeAttr(value) { return escapeHtml(value); }
+
+function licenseAllowsDisplay(code) {
+  if (!code) return false;
+  const allowed = new Set(['cc0','cc-by','cc-by-sa','cc-by-nc','cc-by-nc-sa','cc-by-nd','cc-by-nc-nd']);
+  return allowed.has(String(code).toLowerCase());
+}
+
+function licenseLabel(code) {
+  const map = {
+    'cc0': 'CC0',
+    'cc-by': 'CC BY',
+    'cc-by-sa': 'CC BY-SA',
+    'cc-by-nc': 'CC BY-NC',
+    'cc-by-nc-sa': 'CC BY-NC-SA',
+    'cc-by-nd': 'CC BY-ND',
+    'cc-by-nc-nd': 'CC BY-NC-ND'
+  };
+  return map[String(code || '').toLowerCase()] || '';
+}
+
+function licenseUrl(code) {
+  const c = String(code || '').toLowerCase();
+  if (c === 'cc0') return 'https://creativecommons.org/publicdomain/zero/1.0/';
+  const slug = c.replace('cc-', '').replaceAll('-', '/');
+  return slug ? `https://creativecommons.org/licenses/${slug}/4.0/` : 'https://creativecommons.org/licenses/';
+}
+
+function photoCreditHtml(m, extraClass = '') {
+  if (!m.photo) return '';
+  const attribution = escapeHtml(m.photoAttribution || 'Photo via iNaturalist');
+  const label = licenseLabel(m.photoLicenseCode);
+  const license = label
+    ? ` · <a href="${escapeAttr(licenseUrl(m.photoLicenseCode))}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">${label}</a>`
+    : '';
+  return `<div class="photo-credit ${extraClass}">${attribution}${license}</div>`;
+}
+
+function mothImageHtml(m, size = 'card') {
+  const fallbackSize = size === 'list' ? 24 : size === 'modal' ? 64 : 40;
+  if (!m.photo) return `<span style="font-size:${fallbackSize}px">🦋</span>`;
+  return `<img src="${escapeAttr(m.photo)}" alt="${escapeAttr(m.name)}" loading="lazy" onerror="this.outerHTML='&lt;span style=&quot;font-size:${fallbackSize}px&quot;&gt;🦋&lt;/span&gt;'">`;
+}
 
 // ─── Date helpers ────────────────────────────────────────────────
 function getMonths() {
@@ -464,9 +532,8 @@ function renderGrid(moths, container) {
     const badge = m.count > 100 ? '<span class="badge badge-common">Common</span>'
       : m.count > 20 ? '<span class="badge badge-occasional">Occasional</span>'
       : '<span class="badge badge-rare">Rare</span>';
-    const img = m.photo
-      ? `<img src="${m.photo}" alt="${m.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:40px>🦋</span>'">`
-      : '<span style="font-size:40px">🦋</span>';
+    const img = mothImageHtml(m, 'card');
+    const credit = photoCreditHtml(m, 'card-photo-credit');
     const scoreColor = m.flightScore >= 70 ? 'var(--accent)' : m.flightScore >= 45 ? '#ef9f27' : '#888';
     return `<div class="moth-card" onclick="openModal(${m.id})">
       <div class="moth-img">
@@ -474,15 +541,16 @@ function renderGrid(moths, container) {
         <div class="moth-likelihood" style="background:rgba(0,0,0,0.6)">${m.flightScore}%</div>
       </div>
       <div class="moth-body">
-        <div class="moth-common">${m.name}</div>
-        <div class="moth-sci">${m.sci}</div>
+        <div class="moth-common">${escapeHtml(m.name)}</div>
+        <div class="moth-sci">${escapeHtml(m.sci)}</div>
+        ${credit}
         <div class="moth-season">${seasonBars([...active,...peak])}</div>
         <div class="moth-footer">
           <span class="moth-obs">👁 ${m.count.toLocaleString()}</span>
           ${badge}
         </div>
         <div class="moth-actions">
-          <a class="moth-link" href="https://www.inaturalist.org/taxa/${m.id}" target="_blank" onclick="event.stopPropagation()">iNaturalist →</a>
+          <a class="moth-link" href="https://www.inaturalist.org/taxa/${m.id}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">iNaturalist →</a>
           <button class="share-btn" onclick="event.stopPropagation();shareMoth(${m.id},'${encodeURIComponent(m.name)}')">🔗 Share</button>
         </div>
       </div>
@@ -493,9 +561,8 @@ function renderGrid(moths, container) {
 function renderList(moths, container) {
   container.innerHTML = '<div class="moth-list">' + moths.map(m => {
     const { active, peak } = estimateSeasonMonths(m);
-    const img = m.photo
-      ? `<img src="${m.photo}" alt="${m.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span style=font-size:24px>🦋</span>'">`
-      : '<span style="font-size:24px">🦋</span>';
+    const img = mothImageHtml(m, 'list');
+    const credit = photoCreditHtml(m, 'card-photo-credit');
     const badge = m.count > 100 ? '<span class="badge badge-common">Common</span>'
       : m.count > 20 ? '<span class="badge badge-occasional">Occasional</span>'
       : '<span class="badge badge-rare">Rare</span>';
@@ -503,8 +570,9 @@ function renderList(moths, container) {
     return `<div class="moth-list-item" onclick="openModal(${m.id})">
       <div class="list-img">${img}</div>
       <div class="list-body">
-        <div class="list-name">${m.name}</div>
-        <div class="list-sci">${m.sci}</div>
+        <div class="list-name">${escapeHtml(m.name)}</div>
+        <div class="list-sci">${escapeHtml(m.sci)}</div>
+        ${credit}
         <div class="list-season">${seasonBars([...active,...peak])}</div>
       </div>
       <div class="list-right">
@@ -532,17 +600,17 @@ function openModal(taxonId) {
   const fs = calcMothScore(m, nightScore);
   const scoreColor = fs >= 70 ? 'var(--accent)' : fs >= 45 ? '#ef9f27' : 'var(--muted)';
 
-  const img = m.photo
-    ? `<div class="modal-img"><img src="${m.photo}" alt="${m.name}"></div>`
-    : `<div class="modal-img">🦋</div>`;
+  const img = `<div class="modal-img">${mothImageHtml(m, 'modal')}</div>`;
+  const credit = photoCreditHtml(m, 'modal-photo-credit');
 
   const html = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
     <div class="modal">
       ${img}
       <button class="modal-close" onclick="closeModal()">✕</button>
       <div class="modal-body">
-        <div class="modal-title">${m.name}</div>
-        <div class="modal-sci">${m.sci}</div>
+        <div class="modal-title">${escapeHtml(m.name)}</div>
+        <div class="modal-sci">${escapeHtml(m.sci)}</div>
+        ${credit}
         <div class="modal-score-row">
           <div class="modal-score-num" style="color:${scoreColor}">${fs}%</div>
           <div class="modal-score-label">estimated flight<br>likelihood tonight</div>
@@ -566,9 +634,9 @@ function openModal(taxonId) {
         <div class="modal-section">
           <h3>Links</h3>
           <div class="modal-links">
-            <a class="modal-link" href="https://www.inaturalist.org/taxa/${m.id}" target="_blank">📷 iNaturalist</a>
-            <a class="modal-link" href="https://www.butterfliesandmoths.org/search?field_bam_description_value=${encodeURIComponent(m.sci)}" target="_blank">🦋 B&amp;M of NA</a>
-            <a class="modal-link" href="https://bugguide.net/index.php?q=search&amp;keys=${encodeURIComponent(m.sci)}" target="_blank">🐛 BugGuide</a>
+            <a class="modal-link" href="https://www.inaturalist.org/taxa/${m.id}" target="_blank" rel="noopener noreferrer">📷 iNaturalist</a>
+            <a class="modal-link" href="https://www.butterfliesandmoths.org/search?field_bam_description_value=${encodeURIComponent(m.sci)}" target="_blank" rel="noopener noreferrer">🦋 B&amp;M of NA</a>
+            <a class="modal-link" href="https://bugguide.net/index.php?q=search&amp;keys=${encodeURIComponent(m.sci)}" target="_blank" rel="noopener noreferrer">🐛 BugGuide</a>
           </div>
         </div>
         <div style="display:flex;gap:8px;margin-top:1rem">
@@ -694,14 +762,21 @@ async function fetchMoths(lat, lng) {
     const res = await fetch(url);
     if (!res.ok) throw new Error('API error');
     const data = await res.json();
-    return (data.results || []).map(r => ({
-      id: r.taxon.id,
-      name: r.taxon.preferred_common_name || r.taxon.name,
-      sci: r.taxon.name,
-      photo: r.taxon.default_photo ? r.taxon.default_photo.medium_url : null,
-      count: r.count,
-      family: r.taxon.iconic_taxon_name || ''
-    }));
+    return (data.results || []).map(r => {
+      const taxon = r.taxon || {};
+      const photo = taxon.default_photo || null;
+      const licensedPhoto = photo && licenseAllowsDisplay(photo.license_code);
+      return {
+        id: taxon.id,
+        name: taxon.preferred_common_name || taxon.name || 'Unknown moth',
+        sci: taxon.name || '',
+        photo: licensedPhoto ? (photo.medium_url || photo.url || null) : null,
+        photoAttribution: licensedPhoto ? (photo.attribution || 'Photo via iNaturalist') : '',
+        photoLicenseCode: licensedPhoto ? (photo.license_code || '') : '',
+        count: r.count || 0,
+        family: taxon.iconic_taxon_name || ''
+      };
+    }).filter(m => m.id);
   } catch(e) { return null; }
 }
 
@@ -713,7 +788,7 @@ async function searchByText() {
   try {
     const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&addressdetails=1`);
     const data = await res.json();
-    if (!data.length) { setStatus('Location not found. Try a city, state, or ZIP.', true); return; }
+    if (!data.length) { setStatus('Location not found. Try a city, region, country, or postal code.', true); return; }
     const { lat, lon, display_name } = data[0];
     const parts = display_name.split(',').map(p => p.trim()).filter(Boolean);
     const name = parts.length > 2 ? `${parts[0]}, ${parts[parts.length - 1]}` : display_name;
@@ -736,7 +811,12 @@ function geoLocate() {
     } catch(e) {}
     document.getElementById('loc-input').value = name;
     fetchAll(lat, lng, name);
-  }, () => { setStatus('Could not get location. Search by city name instead.', true); });
+  }, () => { setStatus('Could not get location. Search by place name instead.', true); });
+}
+
+function clearSavedLocation() {
+  try { localStorage.removeItem('wft_last'); } catch(e) {}
+  showToast('Saved location removed from this browser.');
 }
 
 // ─── Init ────────────────────────────────────────────────────────
