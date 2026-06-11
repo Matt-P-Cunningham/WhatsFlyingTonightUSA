@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moth Visual Identification Key</title>
+<style>
+/* ── Design tokens ─────────────────────────────────── */
+:root {
+  --ink:       #1a1a14;
+  --ink-mid:   #4a4840;
+  --ink-soft:  #7a7870;
+  --paper:     #f6f4ee;
+  --surface:   #ffffff;
+  --surface2:  #f2f0e9;
+  --border:    #dedad0;
+  --border-hi: #c9c4b8;
+  --accent:    #2e5e28;
+  --accent-lt: #d8ecce;
+  --accent-dk: #1d3e1a;
+  --link:      #1a4b72;
+  --warn-bg:   #fff8e6;
+  --warn-brd:  #e8c966;
+  --warn-ink:  #604a00;
+  --bad:       #9b2d2d;
+  --bad-bg:    #fdf0f0;
+  --info-bg:   #e8f2f9;
+  --info-brd:  #a9ccdf;
+  --info-ink:  #103558;
+  --r:         10px;
+  --shadow:    0 4px 20px rgba(0,0,0,.07);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,.11);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:14px;line-height:1.5}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── Header ─── */
+header{
+  background:var(--accent-dk);color:#fff;
+  padding:14px 20px;
+  position:sticky;top:0;z-index:30;
+  border-bottom:3px solid var(--accent)
+}
+.hdr{max-width:1300px;margin:auto;display:flex;
+  align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.hdr h1{font-size:17px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.hdr h1 svg{opacity:.8}
+.hdr-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{font-size:11px;padding:3px 8px;border-radius:999px;
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff}
+.badge.research{background:rgba(46,94,40,.5);border-color:rgba(100,180,90,.4)}
+
+/* ── Layout ─── */
+main{max-width:1300px;margin:auto;padding:16px}
+.layout{display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}}
+
+/* ── Card ─── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden}
+.card-head{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2);
+  display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card-head h2{font-size:14px;font-weight:700}
+.card-body{padding:16px}
+.card-foot{padding:10px 16px;border-top:1px solid var(--border);background:var(--surface2);
+  font-size:11px;color:var(--ink-soft)}
+
+/* ── Form controls ─── */
+input,select,button,textarea{font:inherit}
+input,select{
+  width:100%;border:1px solid var(--border);background:#fff;
+  border-radius:7px;padding:9px 10px;color:var(--ink);
+  transition:border-color .15s
+}
+input:focus,select:focus{outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(46,94,40,.12)}
+.input-row{display:flex;gap:8px}
+.input-row input{flex:1}
+
+button{
+  border:1px solid var(--border);background:var(--surface);
+  border-radius:7px;padding:9px 12px;cursor:pointer;color:var(--ink);
+  white-space:nowrap;transition:background .12s,border-color .12s
+}
+button:hover:not(:disabled){background:var(--surface2);border-color:var(--border-hi)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+button.primary:hover:not(:disabled){background:var(--accent-dk)}
+button.ghost{background:transparent;border-color:transparent;color:var(--ink-mid)}
+button.ghost:hover:not(:disabled){background:var(--surface2);border-color:var(--border)}
+button.sm{padding:6px 9px;font-size:12px}
+
+/* ── Notices ─── */
+.notice{border-radius:8px;padding:10px 12px;font-size:12.5px;margin-top:10px}
+.notice.info{background:var(--info-bg);border:1px solid var(--info-brd);color:var(--info-ink)}
+.notice.warn{background:var(--warn-bg);border:1px solid var(--warn-brd);color:var(--warn-ink)}
+.notice.err{background:var(--bad-bg);border:1px solid #e8a0a0;color:var(--bad)}
+.notice strong{font-weight:700}
+
+/* ── KPIs ─── */
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.kpi{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.kpi .n{font-size:22px;font-weight:800;line-height:1;color:var(--accent)}
+.kpi .l{font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
+
+/* ── Tabs ─── */
+.tab-bar{display:flex;gap:4px;border-bottom:1px solid var(--border);padding-bottom:0;margin-bottom:14px}
+.tab{padding:8px 11px;font-size:13px;border:1px solid transparent;
+  border-radius:7px 7px 0 0;border-bottom:none;background:none;cursor:pointer;
+  color:var(--ink-mid);position:relative;bottom:-1px;transition:color .12s}
+.tab:hover{color:var(--ink)}
+.tab.active{background:var(--surface);border-color:var(--border);border-bottom-color:var(--surface);
+  color:var(--ink);font-weight:600}
+
+/* ── Key panel ─── */
+.progress-track{height:5px;background:var(--surface2);border-radius:999px;overflow:hidden;margin-bottom:14px}
+.progress-fill{height:100%;background:var(--accent);border-radius:999px;width:0%;transition:width .3s}
+
+.q-diagram{position:relative;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;min-height:180px;max-height:240px;
+  display:flex;align-items:center;justify-content:center}
+.q-diagram img{width:100%;height:100%;object-fit:contain;display:block;max-height:240px}
+.q-diagram-ph{padding:20px;text-align:center;color:var(--ink-soft);font-size:12px;line-height:1.5}
+.q-diagram-credit{font-size:10.5px;color:var(--ink-soft);margin-top:6px;line-height:1.4}
+.overlay{position:absolute;inset:0;pointer-events:none}
+.hz{position:absolute;border:2px solid transparent;border-radius:8px;transition:.2s}
+.hz.lit{border-color:rgba(46,94,40,.85);background:rgba(46,94,40,.1);
+  box-shadow:inset 0 0 0 1px rgba(46,94,40,.3)}
+
+.q-title{font-size:16px;font-weight:700;margin:12px 0 2px}
+.q-help{font-size:12.5px;color:var(--ink-mid);margin-bottom:11px;line-height:1.4}
+
+.option-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:7px}
+.option{
+  border:1px solid var(--border);border-radius:8px;background:#fff;
+  padding:9px 11px;text-align:left;cursor:pointer;width:100%;
+  transition:border-color .12s,background .12s
+}
+.option:hover{border-color:var(--accent);background:var(--accent-lt)}
+.option.active{border-color:var(--accent);background:var(--accent-lt);font-weight:600}
+.option .opt-label{font-size:13px;font-weight:600;color:var(--ink)}
+.option .opt-desc{font-size:11px;color:var(--ink-soft);margin-top:2px;line-height:1.3}
+
+.q-nav{display:flex;justify-content:space-between;gap:8px;margin-top:14px;flex-wrap:wrap}
+.q-nav-left,.q-nav-right{display:flex;gap:6px}
+
+/* ── Step indicator ─── */
+.step-label{font-size:11px;color:var(--ink-soft);font-weight:600;text-transform:uppercase;
+  letter-spacing:.06em}
+.group-label{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:999px;
+  background:var(--surface2);border:1px solid var(--border);color:var(--ink-soft);margin-bottom:6px}
+
+/* ── Results ─── */
+.results-section{margin-top:16px}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.r-card{border:1px solid var(--border);border-radius:var(--r);background:#fff;
+  overflow:hidden;display:flex;flex-direction:column}
+.r-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px);transition:.15s}
+.r-img{aspect-ratio:4/3;background:var(--surface2);position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center}
+.r-img img{width:100%;height:100%;object-fit:cover;display:block}
+.r-img-ph{font-size:11.5px;color:var(--ink-soft);text-align:center;padding:12px;line-height:1.4}
+.score-badge{position:absolute;right:8px;top:8px;
+  background:rgba(10,20,8,.75);color:#fff;border-radius:999px;
+  padding:3px 8px;font-weight:800;font-size:12px;backdrop-filter:blur(4px)}
+.score-badge.high{background:rgba(30,80,25,.85)}
+.score-badge.mid{background:rgba(80,70,10,.85)}
+.rank-badge{position:absolute;left:8px;top:8px;
+  background:rgba(10,20,8,.6);color:rgba(255,255,255,.9);
+  border-radius:4px;padding:2px 6px;font-size:10px;font-weight:700}
+
+.r-body{padding:11px;flex:1}
+.r-name{font-size:14px;font-weight:700}
+.r-sci{font-style:italic;color:var(--ink-soft);font-size:11.5px;margin-top:1px}
+.tag-row{display:flex;flex-wrap:wrap;gap:4px;margin:7px 0}
+.tag{border:1px solid var(--border);border-radius:999px;
+  padding:2px 7px;font-size:10.5px;color:var(--ink-mid);background:var(--surface2)}
+.tag.green{background:var(--accent-lt);border-color:#9ecb92;color:var(--accent-dk)}
+.tag.amber{background:var(--warn-bg);border-color:var(--warn-brd);color:var(--warn-ink)}
+.tag.red{background:var(--bad-bg);border-color:#e0a0a0;color:var(--bad)}
+.r-note{font-size:11.5px;color:var(--ink-mid);margin-bottom:6px;line-height:1.4}
+
+.evidence{border-top:1px solid var(--border);padding-top:8px;margin-top:6px}
+.ev-row{display:grid;grid-template-columns:14px 1fr;gap:5px;
+  font-size:11.5px;color:var(--ink-mid);margin:3px 0;align-items:baseline}
+.ev-icon{font-size:10px;text-align:center;font-weight:900}
+.ev-icon.ok{color:var(--accent)}
+.ev-icon.no{color:var(--bad)}
+.ev-icon.eh{color:var(--ink-soft)}
+
+.r-links{font-size:11px;margin-top:8px;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:4px}
+.r-links a{color:var(--link)}
+
+.r-foot{padding:7px 11px;border-top:1px solid var(--border);
+  font-size:10.5px;color:var(--ink-soft);background:var(--surface2);line-height:1.3}
+
+/* ── Filter bar ─── */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.filter-bar label{font-size:12px;color:var(--ink-mid);white-space:nowrap}
+.filter-bar select{width:auto;font-size:12px;padding:6px 8px}
+.sort-row{display:flex;gap:6px;align-items:center}
+
+/* ── Analytics table ─── */
+table.atbl{width:100%;border-collapse:collapse;font-size:12px}
+table.atbl th,table.atbl td{border-bottom:1px solid var(--border);
+  padding:6px 8px;text-align:left;vertical-align:middle}
+table.atbl th{color:var(--ink-soft);font-weight:700;background:var(--surface2);
+  position:sticky;top:0}
+table.atbl tbody tr:hover{background:var(--surface2)}
+.bar-cell{display:flex;align-items:center;gap:5px}
+.bar{height:6px;border-radius:999px;background:var(--accent);flex-shrink:0}
+
+/* ── Diagram panel ─── */
+.diag-wrap{position:relative;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;min-height:220px;max-height:600px;
+  display:flex;align-items:center;justify-content:center}
+.diag-wrap img{width:100%;height:auto;object-fit:contain;max-height:600px}
+.diag-ph{padding:24px;text-align:center;color:var(--ink-soft);font-size:13px}
+.diag-credit{font-size:11px;color:var(--ink-soft);margin-top:8px;line-height:1.4}
+.diag-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+
+/* ── Sources ─── */
+.source-list{display:grid;gap:8px}
+.src{border:1px solid var(--border);border-radius:8px;padding:11px;background:#fff}
+.src strong{display:block;font-size:13px;margin-bottom:3px}
+.src p{font-size:12.5px;color:var(--ink-mid);line-height:1.4}
+
+/* ── Status / misc ─── */
+.status-line{font-size:12.5px;color:var(--ink-soft);margin-top:8px;min-height:16px}
+.status-line.err{color:var(--bad)}
+.status-line.ok{color:var(--accent)}
+.hidden{display:none!important}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;
+  background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+.empty-state{text-align:center;padding:32px 20px;color:var(--ink-soft);font-size:13px;line-height:1.5}
+.section-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  margin-bottom:10px}
+.section-head h2{font-size:15px;font-weight:700}
+footer{font-size:11.5px;color:var(--ink-soft);padding:18px 0 10px;
+  max-width:1300px;margin:auto;line-height:1.5}
+
+/* ── Confidence legend ─── */
+.conf-legend{display:flex;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--ink-soft);
+  margin-bottom:10px;align-items:center}
+.conf-swatch{width:10px;height:10px;border-radius:2px;display:inline-block;vertical-align:middle;margin-right:3px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <h1>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+        <path d="M8 12s1.5-3 4-3 4 3 4 3-1.5 3-4 3-4-3-4-3z"/>
+        <circle cx="12" cy="12" r="1.5"/>
+      </svg>
+      Moth Visual Identification Key
+    </h1>
+    <div class="hdr-right">
+      <span class="badge research">Research prototype</span>
+      <span class="badge">No AI-generated imagery</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="layout">
+
+    <!-- Left: location + candidates -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Candidate pool</h2>
+        <span class="step-label" id="candidate-count">Built-in profiles</span>
+      </div>
+      <div class="card-body">
+        <div class="input-row">
+          <input id="location-input" placeholder="City, region, or coordinates…" autocomplete="off">
+          <button class="primary" id="search-btn">Search</button>
+        </div>
+        <div class="status-line" id="status">Location search adds iNaturalist occurrence priors. The key works immediately without a location.</div>
+        <div class="kpi-row">
+          <div class="kpi"><div class="n" id="kpi-candidates">0</div><div class="l">Candidates</div></div>
+          <div class="kpi"><div class="n" id="kpi-profiled">0</div><div class="l">Trait-profiled</div></div>
+          <div class="kpi"><div class="n" id="kpi-answers">0</div><div class="l">Answers given</div></div>
+        </div>
+        <div class="notice info" style="margin-top:12px">
+          <strong>Scoring method.</strong> Score = 68% morphology + 22% local occurrence prior + 10% profile quality. Unanswered or skipped characters don't penalize any candidate.
+        </div>
+        <div class="notice warn">
+          <strong>Important limits.</strong> Many moths cannot be identified to species from photos alone. For cryptic taxa, similar sister species, or worn specimens, genitalic dissection or DNA barcoding may be required.
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: key + tabs -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Visual key</h2>
+        <span class="step-label" id="step-label">Step 1</span>
+      </div>
+      <div class="card-body">
+        <div class="tab-bar">
+          <button class="tab active" data-panel="key-panel">Key</button>
+          <button class="tab" data-panel="diagram-panel">Reference diagrams</button>
+          <button class="tab" data-panel="analytics-panel">Analytics</button>
+          <button class="tab" data-panel="sources-panel">Sources</button>
+        </div>
+
+        <!-- KEY PANEL -->
+        <div id="key-panel">
+          <div class="progress-track"><div class="progress-fill" id="progress-bar"></div></div>
+          <div class="q-diagram" id="mini-diagram">
+            <img id="question-diagram-img" alt="Wing diagram" style="display:none">
+            <div class="q-diagram-ph" id="question-diagram-ph">Loading reference diagram…</div>
+            <div class="overlay" id="question-overlay"></div>
+          </div>
+          <div class="q-diagram-credit" id="question-diagram-credit"></div>
+
+          <div style="margin-top:14px">
+            <div class="group-label" id="q-group">Group</div>
+            <h3 class="q-title" id="question-title">Loading…</h3>
+            <p class="q-help" id="question-help"></p>
+            <div class="option-grid" id="options"></div>
+          </div>
+
+          <div class="q-nav">
+            <div class="q-nav-left">
+              <button id="back-btn" class="ghost sm">← Back</button>
+              <button id="skip-btn" class="ghost sm">Skip / not visible</button>
+            </div>
+            <div class="q-nav-right">
+              <button id="reset-btn" class="sm">Reset all</button>
+              <button class="primary sm" id="next-btn">Next →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIAGRAM PANEL -->
+        <div id="diagram-panel" class="hidden">
+          <div class="notice info">Diagrams are fetched from Wikimedia Commons with license attribution. The overlay on the key panel highlights the region relevant to the current question.</div>
+          <div class="diag-wrap" style="margin-top:12px" id="main-diag-wrap">
+            <img id="main-diagram-img" alt="Lepidoptera diagram" style="display:none">
+            <div class="diag-ph" id="main-diagram-ph">Click a button below to load a diagram.</div>
+          </div>
+          <div class="diag-credit" id="main-diagram-credit"></div>
+          <div class="diag-btns">
+            <button class="sm" id="load-wing-pattern">Wing pattern terminology</button>
+            <button class="sm" id="load-venation">Venation diagram</button>
+            <button class="sm" id="load-catocala">Underwing forewing pattern</button>
+            <button class="sm" id="load-genitalia-note">⚠ Genitalia note</button>
+          </div>
+        </div>
+
+        <!-- ANALYTICS PANEL -->
+        <div id="analytics-panel" class="hidden">
+          <div class="notice info">Live scoring breakdown for all candidates. Morphology score is normalised against the maximum possible for the characters answered so far.</div>
+          <div style="overflow-x:auto;margin-top:12px">
+            <table class="atbl" id="analytics-table"></table>
+          </div>
+        </div>
+
+        <!-- SOURCES PANEL -->
+        <div id="sources-panel" class="hidden">
+          <div class="source-list">
+            <div class="src"><strong>iNaturalist</strong>
+              <p>Research-grade species counts and taxon photos from within 80 km of the entered location in the current seasonal window (±21 days). Photo license and attribution shown as returned by the API.</p>
+            </div>
+            <div class="src"><strong>Wikimedia Commons</strong>
+              <p>Open-media reference photos and morphology diagrams via the MediaWiki imageinfo API. License metadata is fetched with each image.</p>
+            </div>
+            <div class="src"><strong>GBIF</strong>
+              <p>Taxonomic backbone crosswalk via the GBIF Species Match API. Used for authoritative links, not trait scoring.</p>
+            </div>
+            <div class="src"><strong>BOLD Systems</strong>
+              <p>Barcode of Life Data System. Visual trait scoring is not inferred from DNA data; links are provided for taxonomic context only.</p>
+            </div>
+            <div class="src"><strong>Curated trait matrix</strong>
+              <p>This prototype includes <strong>18 species</strong> spanning Noctuidae, Erebidae, Geometridae, Sphingidae, and Saturniidae. Each profile carries a quality flag. The matrix should be expanded with cited regional monographs and reviewed by specialists before research use.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Results -->
+  <section class="results-section">
+    <div class="section-head">
+      <h2>Ranked identification suggestions</h2>
+      <div class="filter-bar">
+        <label>Filter family:</label>
+        <select id="filter-family"><option value="">All families</option></select>
+        <label>Sort:</label>
+        <select id="sort-by">
+          <option value="score">Score</option>
+          <option value="morph">Morphology</option>
+          <option value="prior">Local prior</option>
+        </select>
+      </div>
+    </div>
+    <div class="conf-legend">
+      <span><span class="conf-swatch" style="background:#2e5e28"></span> Score ≥70: strong match</span>
+      <span><span class="conf-swatch" style="background:#8a7008"></span> Score 45–69: partial match</span>
+      <span><span class="conf-swatch" style="background:#9b2d2d"></span> Score &lt;45: poor match</span>
+    </div>
+    <div id="results" class="results-grid">
+      <div class="empty-state">Answer questions above to see ranked candidates.</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <strong>Privacy:</strong> Location data entered is sent only to Nominatim (OSM) for geocoding and to iNaturalist for occurrence priors. This file does not transmit your identification answers to any server.
+  &nbsp;·&nbsp; <strong>Citation:</strong> If using this tool in research, note that it is a computational aid, not a taxonomic determination. Voucher specimens and expert review are always preferable.
+</footer>
+
+<script>
+"use strict";
+
+/* ═══════════════════════════════════════════════════
+   CONSTANTS & API ENDPOINTS
+═══════════════════════════════════════════════════ */
+const API = {
+  inatSpeciesCounts: "https://api.inaturalist.org/v1/observations/species_counts",
+  nominatim: "https://nominatim.openstreetmap.org/search",
+  commons: "https://commons.wikimedia.org/w/api.php",
+  gbifMatch: "https://api.gbif.org/v1/species/match"
+};
+
+const MOTH_TAXON_ID   = 47157;
+const BUTTERFLY_TAXON_ID = 47224;
+const SEARCH_RADIUS_KM = 80;
+const WINDOW_DAYS      = 21;
+
+/* ═══════════════════════════════════════════════════
+   STATE LABEL LOOKUP
+═══════════════════════════════════════════════════ */
+const stateLabels = {
+  unknown:"Unknown / not visible",
+  // antennae
+  simple:"Threadlike / simple",
+  pectinate:"Pectinate (comb on one side)",
+  bipectinate:"Bipectinate (feathery both sides)",
+  // forewing shape
+  narrow:"Narrow / lance-shaped",
+  triangular:"Triangular",
+  broad:"Broad / rounded",
+  falcate:"Falcate / hooked apex",
+  scalloped_margin:"Strongly scalloped outer margin",
+  // body
+  robust:"Robust / heavy-bodied",
+  slender:"Slender",
+  furry:"Densely scaled / furry thorax",
+  sphinx_body:"Streamlined sphinx-like body",
+  geometrid_body:"Delicate geometrid-like body",
+  saturniid_body:"Large silkmoth-like body",
+  // posture
+  tented:"Tented (roof-like over body)",
+  flat:"Flat / wings spread",
+  wrapped:"Wrapped / wings folded tight",
+  // color
+  brown_gray:"Brown or gray",
+  green:"Green",
+  yellow_orange:"Yellow or orange",
+  white:"White / cream",
+  dark_brown:"Dark brown to blackish",
+  // marks
+  absent:"Absent",
+  faint:"Faint / indistinct",
+  strong:"Strong / conspicuous",
+  round:"Round",
+  oval:"Oval",
+  kidney:"Kidney-shaped",
+  ringed:"Ringed / outlined",
+  dark:"Dark-filled",
+  pale:"Pale-filled",
+  // lines
+  wavy:"Wavy / gently curved",
+  zigzag:"Zigzag / sharply angled",
+  straight:"Straight",
+  double:"Double (two close lines)",
+  broken:"Broken / interrupted",
+  continuous:"Continuous",
+  checkered:"Checkered",
+  // hindwing
+  orange_black:"Orange with dark border",
+  pink_black:"Pink/red with dark banding",
+  plain_pale:"Plain pale",
+  banded:"Distinctly banded (not orange/red)",
+  gray_banded:"Gray with banding",
+  yellow_banded:"Yellow with dark border",
+  // margin
+  smooth:"Smooth / even",
+  // body spot
+  white_spots:"White spots on abdomen",
+  no_spot:"No distinctive spots"
+};
+
+/* ═══════════════════════════════════════════════════
+   CHARACTERS (questions) — ordered by diagnostic power
+═══════════════════════════════════════════════════ */
+const characters = [
+  {
+    id:"body_build",
+    group:"Whole animal",
+    title:"Body build",
+    help:"Compare body mass and shape relative to the wings.",
+    region:"body",
+    weight:0.85,
+    options:["robust","slender","furry","sphinx_body","geometrid_body","saturniid_body","unknown"]
+  },
+  {
+    id:"resting_posture",
+    group:"Whole animal",
+    title:"Resting posture",
+    help:"How are the wings held at rest?",
+    region:"whole",
+    weight:0.70,
+    options:["tented","flat","wrapped","unknown"]
+  },
+  {
+    id:"antenna_type",
+    group:"Head",
+    title:"Antenna type",
+    help:"Score only if antennae are clearly visible in the image.",
+    region:"antenna",
+    weight:1.00,
+    options:["simple","pectinate","bipectinate","unknown"]
+  },
+  {
+    id:"forewing_shape",
+    group:"Forewing",
+    title:"Forewing shape",
+    help:"Look at the overall outline of the forewing, ignoring pattern.",
+    region:"forewing",
+    weight:0.90,
+    options:["narrow","triangular","broad","falcate","scalloped_margin","unknown"]
+  },
+  {
+    id:"ground_color",
+    group:"Color",
+    title:"Dominant forewing color",
+    help:"Use the main resting color, ignoring pattern elements.",
+    region:"forewing",
+    weight:0.55,
+    options:["brown_gray","dark_brown","green","yellow_orange","white","unknown"]
+  },
+  {
+    id:"orbicular_spot",
+    group:"Forewing pattern",
+    title:"Orbicular spot",
+    help:"A round or oval spot in the inner median forewing area (Noctuoidea term).",
+    region:"orbicular",
+    weight:1.15,
+    options:["absent","round","oval","ringed","unknown"]
+  },
+  {
+    id:"reniform_spot",
+    group:"Forewing pattern",
+    title:"Reniform spot",
+    help:"A kidney-shaped or larger mark in the outer median forewing (very diagnostic in noctuids).",
+    region:"reniform",
+    weight:1.30,
+    options:["absent","kidney","ringed","dark","pale","unknown"]
+  },
+  {
+    id:"basal_streak",
+    group:"Forewing pattern",
+    title:"Basal streak or dash",
+    help:"A streak or dash running outward from the wing base along a vein.",
+    region:"basal",
+    weight:1.05,
+    options:["absent","faint","strong","unknown"]
+  },
+  {
+    id:"antemedial_line",
+    group:"Forewing pattern",
+    title:"Antemedial line",
+    help:"The transverse line in the basal third of the forewing.",
+    region:"antemedial",
+    weight:0.90,
+    options:["absent","straight","wavy","double","unknown"]
+  },
+  {
+    id:"postmedial_line",
+    group:"Forewing pattern",
+    title:"Postmedial line",
+    help:"The transverse line in the outer third, often the most prominent.",
+    region:"postmedial",
+    weight:1.20,
+    options:["absent","wavy","zigzag","straight","double","unknown"]
+  },
+  {
+    id:"subterminal_line",
+    group:"Forewing pattern",
+    title:"Subterminal line / shade",
+    help:"A line or diffuse shade between the postmedial line and the fringe.",
+    region:"subterminal",
+    weight:0.80,
+    options:["absent","faint","pale","dark","wavy","unknown"]
+  },
+  {
+    id:"hindwing_color",
+    group:"Hindwing",
+    title:"Hindwing color and pattern",
+    help:"Use only if hindwing is visible — highly diagnostic in underwings and sphinx moths.",
+    region:"hindwing",
+    weight:1.35,
+    options:["plain_pale","orange_black","pink_black","yellow_banded","gray_banded","banded","unknown"]
+  },
+  {
+    id:"outer_margin",
+    group:"Wing margin",
+    title:"Outer margin",
+    help:"Is the outer edge of the forewing smooth, scalloped, or strongly angled?",
+    region:"margin",
+    weight:0.65,
+    options:["smooth","scalloped_margin","unknown"]
+  },
+  {
+    id:"fringe_pattern",
+    group:"Wing margin",
+    title:"Fringe pattern",
+    help:"Inspect the narrow fringe along the outer margin when photo resolution allows.",
+    region:"fringe",
+    weight:0.50,
+    options:["continuous","checkered","broken","unknown"]
+  },
+  {
+    id:"abdominal_marks",
+    group:"Abdomen",
+    title:"Abdominal markings",
+    help:"Are there distinct spots, patches, or bands on the abdomen?",
+    region:"body",
+    weight:0.60,
+    options:["no_spot","white_spots","unknown"]
+  }
+];
+
+/* ═══════════════════════════════════════════════════
+   TRAIT COMPATIBILITY (soft-match pairs)
+═══════════════════════════════════════════════════ */
+const compatibility = {
+  brown_gray:     ["dark_brown","faint"],
+  dark_brown:     ["brown_gray"],
+  wavy:           ["scalloped_margin","zigzag"],
+  scalloped_margin:["wavy"],
+  zigzag:         ["wavy"],
+  ringed:         ["round","oval","kidney"],
+  kidney:         ["ringed","oval"],
+  oval:           ["round","ringed","kidney"],
+  round:          ["oval"],
+  robust:         ["furry","saturniid_body"],
+  furry:          ["robust","saturniid_body"],
+  narrow:         ["sphinx_body","triangular"],
+  sphinx_body:    ["narrow","robust"],
+  broad:          ["geometrid_body","saturniid_body","flat"],
+  geometrid_body: ["broad","slender"],
+  saturniid_body: ["broad","robust","furry"],
+  pale:           ["plain_pale","faint"],
+  plain_pale:     ["pale"],
+  banded:         ["gray_banded","yellow_banded"],
+  gray_banded:    ["banded"],
+  yellow_banded:  ["banded"],
+  tented:         ["triangular"],
+  flat:           ["broad"],
+  wrapped:        ["narrow","sphinx_body"]
+};
+
+/* ═══════════════════════════════════════════════════
+   CURATED SPECIES PROFILES — 18 species
+   (expanded from original 11)
+═══════════════════════════════════════════════════ */
+const curatedProfiles = [
+  // ── Noctuidae ──────────────────────────────────────
+  {
+    sci:"Noctua pronuba",
+    common:"Large Yellow Underwing",
+    family:"Noctuidae",
+    inat:81688,
+    note:"Very common Palearctic noctuid. Hindwing color is the key visual diagnostic when visible.",
+    traitQuality:"reviewed",
+    traits:{
+      body_build:["robust"],
+      resting_posture:["tented"],
+      antenna_type:["simple"],
+      forewing_shape:["triangular"],
+      ground_color:["brown_gray"],
+      orbicular_spot:["round","ringed"],
+      reniform_spot:["kidney","ringed","dark"],
+      basal_streak:["absent","faint"],
+      antemedial_line:["wavy"],
+      postmedial_line:["wavy"],
+      subterminal_line:["pale","wavy"],
+      hindwing_color:["orange_black"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  {
+    sci:"Autographa precationis",
+    common:"Common Looper",
+    family:"Noctuidae",
+    inat:119389,
+    note:"Noctuid with a metallic central forewing mark (reduced reniform). Variable pattern.",
+    traitQuality:"starter",
+    traits:{
+      body_build:["robust"],
+      resting_posture:["tented"],
+      antenna_type:["simple"],
+      forewing_shape:["triangular"],
+      ground_color:["brown_gray"],
+      orbicular_spot:["absent"],
+      reniform_spot:["pale","ringed"],
+      basal_streak:["absent","faint"],
+      antemedial_line:["wavy"],
+      postmedial_line:["wavy"],
+      subterminal_line:["pale","broken"],
+      hindwing_color:["plain_pale"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  {
+    sci:"Agrotis ipsilon",
+    common:"Black Cutworm",
+    family:"Noctuidae",
+    inat:92571,
+    note:"A widespread agricultural pest; dark forewing with strong stigmata. Blackish basal streak often present.",
+    traitQuality:"starter",
+    traits:{
+      body_build:["robust"],
+      resting_posture:["tented"],
+      antenna_type:["simple"],
+      forewing_shape:["narrow","triangular"],
+      ground_color:["dark_brown","brown_gray"],
+      orbicular_spot:["round","ringed"],
+      reniform_spot:["kidney","ringed","dark"],
+      basal_streak:["strong"],
+      antemedial_line:["wavy"],
+      postmedial_line:["wavy","zigzag"],
+      subterminal_line:["pale"],
+      hindwing_color:["plain_pale"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  {
+    sci:"Leucania commoides",
+    common:"Comma Wainscot",
+    family:"Noctuidae",
+    inat:220940,
+    note:"Pale straw-colored wainscot; streaky forewing with pale ground color.",
+    traitQuality:"starter",
+    traits:{
+      body_build:["robust"],
+      resting_posture:["tented"],
+      antenna_type:["simple"],
+      forewing_shape:["narrow","triangular"],
+      ground_color:["white","brown_gray"],
+      orbicular_spot:["faint","absent"],
+      reniform_spot:["faint","absent"],
+      basal_streak:["faint"],
+      antemedial_line:["straight","faint"],
+      postmedial_line:["absent","faint"],
+      subterminal_line:["faint"],
+      hindwing_color:["plain_pale"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  // ── Erebidae ──────────────────────────────────────
+  {
+    sci:"Catocala ilia",
+    common:"Ilia Underwing",
+    family:"Erebidae",
+    inat:126200,
+    note:"Typical underwing (Catocala); forewing cryptic bark-like, hindwing pattern diagnostic.",
+    traitQuality:"reviewed",
+    traits:{
+      body_build:["robust"],
+      resting_posture:["tented"],
+      antenna_type:["simple"],
+      forewing_shape:["triangular"],
+      ground_color:["brown_gray"],
+      orbicular_spot:["absent","faint"],
+      reniform_spot:["kidney","ringed"],
+      basal_streak:["faint","strong"],
+      antemedial_line:["wavy"],
+      postmedial_line:["zigzag","wavy"],
+      subterminal_line:["dark","wavy"],
+      hindwing_color:["banded","orange_black"],
+      outer_margin:["smooth","scalloped_margin"],
+      fringe_pattern:["continuous","checkered"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  {
+    sci:"Orgyia leucostigma",
+    common:"White-marked Tussock Moth",
+    family:"Erebidae",
+    inat:81669,
+    note:"Sexually dimorphic — males winged with distinctive white forewing spots; females brachypterous.",
+    traitQuality:"reviewed",
+    traits:{
+      body_build:["robust","furry"],
+      resting_posture:["tented"],
+      antenna_type:["bipectinate","pectinate"],
+      forewing_shape:["triangular"],
+      ground_color:["brown_gray","dark_brown"],
+      orbicular_spot:["absent","faint"],
+      reniform_spot:["absent","faint"],
+      basal_streak:["faint"],
+      antemedial_line:["wavy"],
+      postmedial_line:["wavy"],
+      subterminal_line:["dark","broken"],
+      hindwing_color:["plain_pale"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  {
+    sci:"Euchaetes egle",
+    common:"Milkweed Tussock Moth",
+    family:"Erebidae",
+    inat:122244,
+    note:"Plain pale adult; striking yellow/black larva. Adults nearly unmarked.",
+    traitQuality:"starter",
+    traits:{
+      body_build:["furry","robust"],
+      resting_posture:["tented"],
+      antenna_type:["simple","pectinate"],
+      forewing_shape:["triangular"],
+      ground_color:["white"],
+      orbicular_spot:["absent"],
+      reniform_spot:["absent"],
+      basal_streak:["absent"],
+      antemedial_line:["absent"],
+      postmedial_line:["absent"],
+      subterminal_line:["absent"],
+      hindwing_color:["plain_pale"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["white_spots"]
+    }
+  },
+  {
+    sci:"Grammia virgo",
+    common:"Virgin Tiger Moth",
+    family:"Erebidae",
+    inat:57506,
+    note:"Boldly patterned forewing cream/black; bright red hindwing with black spots; warning coloration.",
+    traitQuality:"starter",
+    traits:{
+      body_build:["robust","furry"],
+      resting_posture:["tented","flat"],
+      antenna_type:["simple","pectinate"],
+      forewing_shape:["triangular"],
+      ground_color:["white","brown_gray"],
+      orbicular_spot:["absent"],
+      reniform_spot:["absent"],
+      basal_streak:["strong","faint"],
+      antemedial_line:["straight","broken"],
+      postmedial_line:["straight","broken"],
+      subterminal_line:["dark"],
+      hindwing_color:["pink_black"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["white_spots"]
+    }
+  },
+  // ── Geometridae ──────────────────────────────────
+  {
+    sci:"Synchlora aerata",
+    common:"Wavy-lined Emerald",
+    family:"Geometridae",
+    inat:120105,
+    note:"Small green geometrid; diagnostic wavy white cross-lines on all wings.",
+    traitQuality:"reviewed",
+    traits:{
+      body_build:["geometrid_body","slender"],
+      resting_posture:["flat"],
+      antenna_type:["simple"],
+      forewing_shape:["broad"],
+      ground_color:["green"],
+      orbicular_spot:["absent"],
+      reniform_spot:["absent"],
+      basal_streak:["absent"],
+      antemedial_line:["wavy"],
+      postmedial_line:["wavy"],
+      subterminal_line:["absent","faint"],
+      hindwing_color:["plain_pale"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  {
+    sci:"Plagodis phlogosaria",
+    common:"Scallop Shell Moth",
+    family:"Geometridae",
+    inat:308682,
+    note:"Orange-brown geometrid with distinctive strongly scalloped outer margin on all wings.",
+    traitQuality:"starter",
+    traits:{
+      body_build:["geometrid_body","slender"],
+      resting_posture:["flat"],
+      antenna_type:["simple"],
+      forewing_shape:["broad","scalloped_margin"],
+      ground_color:["yellow_orange","brown_gray"],
+      orbicular_spot:["absent","round"],
+      reniform_spot:["absent","faint"],
+      basal_streak:["absent"],
+      antemedial_line:["wavy"],
+      postmedial_line:["wavy"],
+      subterminal_line:["faint"],
+      hindwing_color:["plain_pale","banded"],
+      outer_margin:["scalloped_margin"],
+      fringe_pattern:["checkered"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  {
+    sci:"Rheumaptera hastata",
+    common:"Spear-marked Black Moth",
+    family:"Geometridae",
+    inat:186060,
+    note:"Boldly black-and-white geometrid with distinctive spear-like forewing pattern.",
+    traitQuality:"starter",
+    traits:{
+      body_build:["geometrid_body","slender"],
+      resting_posture:["flat"],
+      antenna_type:["simple"],
+      forewing_shape:["broad"],
+      ground_color:["white"],
+      orbicular_spot:["absent"],
+      reniform_spot:["absent"],
+      basal_streak:["absent","strong"],
+      antemedial_line:["straight","broken"],
+      postmedial_line:["straight","broken"],
+      subterminal_line:["dark"],
+      hindwing_color:["plain_pale"],
+      outer_margin:["smooth"],
+      fringe_pattern:["checkered"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  // ── Sphingidae ────────────────────────────────────
+  {
+    sci:"Manduca sexta",
+    common:"Carolina Sphinx",
+    family:"Sphingidae",
+    inat:69701,
+    note:"Large sphinx; yellow abdominal spots and distinctive narrow striped forewing.",
+    traitQuality:"reviewed",
+    traits:{
+      body_build:["sphinx_body","robust"],
+      resting_posture:["wrapped","tented"],
+      antenna_type:["simple"],
+      forewing_shape:["narrow"],
+      ground_color:["brown_gray"],
+      orbicular_spot:["absent"],
+      reniform_spot:["absent"],
+      basal_streak:["absent"],
+      antemedial_line:["wavy"],
+      postmedial_line:["wavy"],
+      subterminal_line:["dark","broken"],
+      hindwing_color:["banded","gray_banded"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["white_spots"]
+    }
+  },
+  {
+    sci:"Eumorpha achemon",
+    common:"Achemon Sphinx",
+    family:"Sphingidae",
+    inat:122237,
+    note:"Sphinx with bold forewing pattern and pink-banded hindwing.",
+    traitQuality:"reviewed",
+    traits:{
+      body_build:["sphinx_body","robust"],
+      resting_posture:["wrapped","tented"],
+      antenna_type:["simple"],
+      forewing_shape:["narrow"],
+      ground_color:["brown_gray"],
+      orbicular_spot:["absent"],
+      reniform_spot:["absent"],
+      basal_streak:["absent"],
+      antemedial_line:["wavy"],
+      postmedial_line:["wavy"],
+      subterminal_line:["dark","wavy"],
+      hindwing_color:["pink_black","banded"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  {
+    sci:"Darapsa myron",
+    common:"Azalea Sphinx",
+    family:"Sphingidae",
+    inat:119424,
+    note:"Medium sphinx; olive-brown forewing, orange-pink hindwing. Rests with hindwings partly visible.",
+    traitQuality:"starter",
+    traits:{
+      body_build:["sphinx_body","robust"],
+      resting_posture:["wrapped","tented"],
+      antenna_type:["simple"],
+      forewing_shape:["narrow"],
+      ground_color:["brown_gray","green"],
+      orbicular_spot:["absent"],
+      reniform_spot:["absent"],
+      basal_streak:["absent"],
+      antemedial_line:["wavy"],
+      postmedial_line:["wavy"],
+      subterminal_line:["faint"],
+      hindwing_color:["pink_black","yellow_banded"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  // ── Saturniidae ───────────────────────────────────
+  {
+    sci:"Actias luna",
+    common:"Luna Moth",
+    family:"Saturniidae",
+    inat:47916,
+    note:"Unmistakable large green silkmoth with long hindwing tails; no noctuid spots.",
+    traitQuality:"reviewed",
+    traits:{
+      body_build:["saturniid_body","robust","furry"],
+      resting_posture:["flat"],
+      antenna_type:["bipectinate","pectinate"],
+      forewing_shape:["broad"],
+      ground_color:["green"],
+      orbicular_spot:["absent"],
+      reniform_spot:["absent"],
+      basal_streak:["absent"],
+      antemedial_line:["absent","faint"],
+      postmedial_line:["absent","faint"],
+      subterminal_line:["absent"],
+      hindwing_color:["plain_pale"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  {
+    sci:"Antheraea polyphemus",
+    common:"Polyphemus Moth",
+    family:"Saturniidae",
+    inat:47919,
+    note:"Large brown silkmoth with bold eyespots on both wing pairs.",
+    traitQuality:"reviewed",
+    traits:{
+      body_build:["saturniid_body","robust","furry"],
+      resting_posture:["flat"],
+      antenna_type:["bipectinate","pectinate"],
+      forewing_shape:["broad"],
+      ground_color:["brown_gray","yellow_orange"],
+      orbicular_spot:["round"],
+      reniform_spot:["absent"],
+      basal_streak:["absent"],
+      antemedial_line:["faint","wavy"],
+      postmedial_line:["wavy"],
+      subterminal_line:["faint"],
+      hindwing_color:["banded","plain_pale"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["no_spot"]
+    }
+  },
+  {
+    sci:"Hyalophora cecropia",
+    common:"Cecropia Moth",
+    family:"Saturniidae",
+    inat:47920,
+    note:"Largest North American moth; distinctive red/white crescent markings on all wings.",
+    traitQuality:"reviewed",
+    traits:{
+      body_build:["saturniid_body","robust","furry"],
+      resting_posture:["flat"],
+      antenna_type:["bipectinate"],
+      forewing_shape:["broad"],
+      ground_color:["dark_brown","brown_gray"],
+      orbicular_spot:["ringed","round"],
+      reniform_spot:["absent"],
+      basal_streak:["absent"],
+      antemedial_line:["wavy","broken"],
+      postmedial_line:["wavy"],
+      subterminal_line:["pale","wavy"],
+      hindwing_color:["banded","pink_black"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["white_spots"]
+    }
+  },
+  {
+    sci:"Callosamia promethea",
+    common:"Promethea Silkmoth",
+    family:"Saturniidae",
+    inat:86637,
+    note:"Sexually dimorphic silkmoth; male dark purplish-brown, female reddish-brown. Distinct pale postmedial line.",
+    traitQuality:"starter",
+    traits:{
+      body_build:["saturniid_body","robust","furry"],
+      resting_posture:["flat"],
+      antenna_type:["bipectinate","pectinate"],
+      forewing_shape:["broad"],
+      ground_color:["dark_brown","brown_gray"],
+      orbicular_spot:["round","faint"],
+      reniform_spot:["absent","faint"],
+      basal_streak:["absent"],
+      antemedial_line:["wavy","faint"],
+      postmedial_line:["wavy","pale"],
+      subterminal_line:["pale"],
+      hindwing_color:["banded"],
+      outer_margin:["smooth"],
+      fringe_pattern:["continuous"],
+      abdominal_marks:["white_spots","no_spot"]
+    }
+  }
+];
+
+/* ═══════════════════════════════════════════════════
+   OPTION DESCRIPTIONS (what to look for)
+═══════════════════════════════════════════════════ */
+const optionDesc = {
+  body_build:{
+    robust:"Body noticeably thick relative to wing size.",
+    slender:"Body thin, inconspicuous.",
+    furry:"Thick, shaggy thoracic hair scales visible.",
+    sphinx_body:"Torpedo-shaped; abdomen tapers to a point.",
+    geometrid_body:"Delicate; body thin relative to broad wings.",
+    saturniid_body:"Very large, heavy-bodied; wings proportionally broad.",
+    unknown:"Cannot assess body."
+  },
+  resting_posture:{
+    tented:"Forewings raised like a tent or roof.",
+    flat:"Wings spread flat away from body.",
+    wrapped:"Forewings wrapped tightly along body sides.",
+    unknown:"Posture unclear."
+  },
+  antenna_type:{
+    simple:"No obvious branches or teeth; threadlike.",
+    pectinate:"Regular comb teeth on one side.",
+    bipectinate:"Heavily feathered on both sides.",
+    unknown:"Antennae not visible."
+  },
+  forewing_shape:{
+    narrow:"Long, lance- or dagger-shaped.",
+    triangular:"Classic triangular noctuid shape.",
+    broad:"Wide; length:width ratio < 2.5.",
+    falcate:"Tip hooked or sickle-shaped.",
+    scalloped_margin:"Outer margin deeply wave-cut.",
+    unknown:"Shape unclear."
+  },
+  hindwing_color:{
+    orange_black:"Vivid orange/yellow with black submarginal band (underwings).",
+    pink_black:"Rosy pink or red with dark bands.",
+    yellow_banded:"Yellow ground with dark outer band.",
+    gray_banded:"Gray/pale with darker band(s).",
+    banded:"Distinct banding, not orange or red.",
+    plain_pale:"Uniformly pale — white, gray, or cream.",
+    unknown:"Hindwing not visible."
+  }
+};
+
+function getOptDesc(qid, opt){
+  if(opt === "unknown") return "Do not score this character.";
+  return optionDesc[qid]?.[opt] || "Use if this best matches the visible feature.";
+}
+
+/* ═══════════════════════════════════════════════════
+   APPLICATION STATE
+═══════════════════════════════════════════════════ */
+let candidates       = [];
+let answers          = {};
+let questionHistory  = [];
+let currentQid       = characters[0].id;
+let localContext     = {lat:null,lng:null,name:null,loaded:false};
+let currentDiagramMeta = null;
+let imageEnrichQueue = [];
+let enrichRunning    = false;
+
+/* ═══════════════════════════════════════════════════
+   DOM SHORTCUTS
+═══════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+const els = {
+  locationInput:    $("location-input"),
+  searchBtn:        $("search-btn"),
+  status:           $("status"),
+  candidateCount:   $("candidate-count"),
+  kpiCandidates:    $("kpi-candidates"),
+  kpiProfiled:      $("kpi-profiled"),
+  kpiAnswers:       $("kpi-answers"),
+  progressBar:      $("progress-bar"),
+  stepLabel:        $("step-label"),
+  qGroup:           $("q-group"),
+  qTitle:           $("question-title"),
+  qHelp:            $("question-help"),
+  options:          $("options"),
+  backBtn:          $("back-btn"),
+  skipBtn:          $("skip-btn"),
+  nextBtn:          $("next-btn"),
+  resetBtn:         $("reset-btn"),
+  results:          $("results"),
+  analyticsTable:   $("analytics-table"),
+  qDiagramImg:      $("question-diagram-img"),
+  qDiagramPh:       $("question-diagram-ph"),
+  qDiagramCredit:   $("question-diagram-credit"),
+  qOverlay:         $("question-overlay"),
+  mainDiagramImg:   $("main-diagram-img"),
+  mainDiagramPh:    $("main-diagram-ph"),
+  mainDiagramCredit:$("main-diagram-credit"),
+  filterFamily:     $("filter-family"),
+  sortBy:           $("sort-by")
+};
+
+/* ═══════════════════════════════════════════════════
+   UTILITY
+═══════════════════════════════════════════════════ */
+function esc(s){
+  return String(s ?? "").replace(/[&<>"']/g,
+    c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function getMonths(){
+  const now = new Date(), months = new Set();
+  for(let d = -WINDOW_DAYS; d <= WINDOW_DAYS; d++){
+    const dt = new Date(now);
+    dt.setDate(now.getDate() + d);
+    months.add(dt.getMonth() + 1);
+  }
+  return [...months].join(",");
+}
+
+function charById(id){ return characters.find(c => c.id === id); }
+
+/* ═══════════════════════════════════════════════════
+   SCORING ENGINE
+═══════════════════════════════════════════════════ */
+function compatible(answer, expected){
+  if(!expected?.length) return false;
+  if(expected.includes(answer)) return true;
+  const comp = compatibility[answer] || [];
+  return expected.some(e => comp.includes(e));
+}
+
+function scoreCandidate(cand){
+  let morphScore = 0, maxMorph = 0;
+  let matchCount = 0, missCount = 0, unknownCount = 0;
+  const rows = [];
+
+  for(const ch of characters){
+    const ans = answers[ch.id];
+    if(!ans || ans === "unknown"){ unknownCount++; continue; }
+    const expected = cand.traits ? cand.traits[ch.id] : null;
+    if(!expected){
+      rows.push({type:"eh", text:`${ch.title}: no profile data`});
+      continue;
+    }
+    maxMorph += ch.weight;
+    if(expected.includes(ans)){
+      morphScore += ch.weight;
+      matchCount++;
+      rows.push({type:"ok", text:`${ch.title}: ${stateLabels[ans] || ans} ✓`});
+    } else if(compatible(ans, expected)){
+      morphScore += ch.weight * 0.45;
+      matchCount++;
+      rows.push({type:"eh",
+        text:`${ch.title}: ${stateLabels[ans]||ans} compatible with ${expected.map(x=>stateLabels[x]||x).join(" / ")}`});
+    } else {
+      morphScore -= ch.weight * 0.70;
+      missCount++;
+      rows.push({type:"no",
+        text:`${ch.title}: ${stateLabels[ans]||ans} — expected ${expected.map(x=>stateLabels[x]||x).join(" / ")}`});
+    }
+  }
+
+  // Normalise morphology to 0–1, allowing for negative evidence
+  const norm = maxMorph > 0
+    ? Math.max(0, Math.min(1, (morphScore + maxMorph * 0.5) / (maxMorph * 1.5)))
+    : 0.5;
+
+  const prior    = Math.max(0.02, Math.min(1, cand.localPrior || 0.30));
+  const quality  = cand.traitQuality === "reviewed" ? 1.0
+                 : cand.traits       ? 0.75
+                 :                     0.20;
+
+  const score = Math.round(100 * (norm * 0.68 + prior * 0.22 + quality * 0.10));
+
+  return {score, norm, prior, quality, matchCount, missCount, unknownCount, rows};
+}
+
+function getRankedCandidates(){
+  const sortKey = els.sortBy?.value || "score";
+  return candidates
+    .map(c => ({...c, _score: scoreCandidate(c)}))
+    .sort((a,b) => {
+      if(sortKey === "morph")  return b._score.norm  - a._score.norm;
+      if(sortKey === "prior")  return b._score.prior - a._score.prior;
+      return b._score.score - a._score.score;
+    });
+}
+
+/* ═══════════════════════════════════════════════════
+   QUESTION SELECTION (information gain proxy)
+═══════════════════════════════════════════════════ */
+function chooseNextQuestion(){
+  const unanswered = characters.filter(c => !answers[c.id]);
+  if(!unanswered.length) return null;
+
+  const top = getRankedCandidates().slice(0, Math.min(10, candidates.length));
+  let best = unanswered[0], bestPower = -Infinity;
+
+  for(const ch of unanswered){
+    // Approximate discriminating power: how much do the top candidates diverge on this char?
+    const stateSet = new Map();
+    for(const c of top){
+      const vals = c.traits?.[ch.id] || [];
+      for(const v of vals) stateSet.set(v, (stateSet.get(v)||0)+1);
+    }
+    const unique = stateSet.size;
+    const total  = [...stateSet.values()].reduce((a,b)=>a+b, 0);
+    // Shannon-like diversity in the top candidates
+    let diversity = 0;
+    for(const cnt of stateSet.values()){
+      const p = cnt / Math.max(1, total);
+      diversity -= p * Math.log2(p + 1e-9);
+    }
+    const power = ch.weight * (unique * 0.4 + diversity * 0.6);
+    if(power > bestPower){ bestPower = power; best = ch; }
+  }
+  return best.id;
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER FUNCTIONS
+═══════════════════════════════════════════════════ */
+function renderQuestion(){
+  const q = charById(currentQid) || characters[0];
+  const answeredCount = Object.values(answers).filter(v => v && v !== "unknown").length;
+  const totalQ = characters.length;
+
+  els.progressBar.style.width = `${Math.round((Object.keys(answers).length / totalQ) * 100)}%`;
+  els.stepLabel.textContent   = `Step ${Math.min(Object.keys(answers).length + 1, totalQ)} of ${totalQ}`;
+  els.qGroup.textContent      = q.group;
+  els.qTitle.textContent      = q.title;
+  els.qHelp.textContent       = q.help;
+  els.kpiAnswers.textContent  = answeredCount;
+
+  els.options.innerHTML = q.options.map(opt => `
+    <button class="option ${answers[q.id] === opt ? "active" : ""}"
+            data-value="${esc(opt)}" data-qid="${esc(q.id)}">
+      <div class="opt-label">${esc(stateLabels[opt] || opt)}</div>
+      <div class="opt-desc">${esc(getOptDesc(q.id, opt))}</div>
+    </button>`).join("");
+
+  els.options.querySelectorAll(".option").forEach(btn =>
+    btn.addEventListener("click", () => setAnswer(btn.dataset.qid, btn.dataset.value))
+  );
+
+  updateDiagramOverlay(q.region);
+}
+
+function renderResults(){
+  const ranked = getRankedCandidates();
+  const familyFilter = els.filterFamily?.value || "";
+
+  const filtered = familyFilter
+    ? ranked.filter(c => (c.family||"") === familyFilter)
+    : ranked;
+
+  if(!filtered.length){
+    els.results.innerHTML = '<div class="empty-state">No candidates match the current filter.</div>';
+    return;
+  }
+
+  els.results.innerHTML = filtered.map((c,i) => resultCard(c, i)).join("");
+
+  // Update family filter options
+  const families = [...new Set(ranked.map(c => c.family).filter(Boolean))].sort();
+  const current  = els.filterFamily.value;
+  els.filterFamily.innerHTML =
+    `<option value="">All families</option>` +
+    families.map(f => `<option value="${esc(f)}" ${current===f?"selected":""}>${esc(f)}</option>`).join("");
+  if(current) els.filterFamily.value = current;
+
+  // KPIs
+  els.kpiCandidates.textContent  = candidates.length;
+  els.kpiProfiled.textContent    = candidates.filter(c => c.traits).length;
+  els.candidateCount.textContent = localContext.loaded
+    ? `${candidates.length} local + curated`
+    : "Built-in profiles";
+}
+
+function resultCard(c, rank){
+  const sc = c._score;
+  const imgEl = c.image
+    ? `<img src="${esc(c.image)}" alt="${esc(c.common||c.sci)}" loading="lazy"
+          onerror="this.closest('.r-img').innerHTML='<div class=r-img-ph>Image failed to load</div>'">`
+    : `<div class="r-img-ph">No open-license image loaded yet<br><small>${esc(c.sci)}</small></div>`;
+
+  const scoreCls = sc.score >= 70 ? "high" : sc.score >= 45 ? "mid" : "";
+  const qualTag  = c.traitQuality === "reviewed"
+    ? `<span class="tag green">trait-reviewed</span>`
+    : c.traits
+      ? `<span class="tag amber">starter profile</span>`
+      : `<span class="tag">occurrence only</span>`;
+
+  const evidence = sc.rows.slice(0,7).map(r =>
+    `<div class="ev-row">
+       <span class="ev-icon ${r.type==="ok"?"ok":r.type==="no"?"no":"eh"}">
+         ${r.type==="ok"?"✓":r.type==="no"?"✗":"—"}
+       </span>
+       <span>${esc(r.text)}</span>
+     </div>`
+  ).join("");
+
+  const links = [
+    c.inat    ? `<a href="https://www.inaturalist.org/taxa/${c.inat}" target="_blank" rel="noopener">iNat</a>` : "",
+    c.gbifKey ? `<a href="https://www.gbif.org/species/${c.gbifKey}" target="_blank" rel="noopener">GBIF</a>`
+              : `<a href="https://www.gbif.org/search?q=${encodeURIComponent(c.sci)}" target="_blank" rel="noopener">GBIF</a>`,
+    `<a href="https://v3.boldsystems.org/index.php/Public_SearchTerms?query=${encodeURIComponent(c.sci)}" target="_blank" rel="noopener">BOLD</a>`,
+    c.commonsPage ? `<a href="${esc(c.commonsPage)}" target="_blank" rel="noopener">Commons image</a>` : ""
+  ].filter(Boolean).join(" · ");
+
+  return `
+    <article class="r-card">
+      <div class="r-img">
+        ${imgEl}
+        <div class="score-badge ${scoreCls}">${sc.score}</div>
+        <div class="rank-badge">#${rank+1}</div>
+      </div>
+      <div class="r-body">
+        <div class="r-name">${esc(c.common || c.sci)}</div>
+        <div class="r-sci">${esc(c.sci)}${c.family ? " · " + esc(c.family) : ""}</div>
+        <div class="tag-row">
+          <span class="tag">morph ${(sc.norm*100).toFixed(0)}%</span>
+          <span class="tag">prior ${(sc.prior*100).toFixed(0)}%</span>
+          ${qualTag}
+          ${c.localCount ? `<span class="tag">${c.localCount} local obs.</span>` : ""}
+        </div>
+        ${c.note ? `<div class="r-note">${esc(c.note)}</div>` : ""}
+        <div class="evidence">
+          ${evidence || '<div style="font-size:12px;color:var(--ink-soft)">Answer questions above to generate evidence.</div>'}
+          ${sc.rows.length > 7 ? `<div style="font-size:11px;color:var(--ink-soft);margin-top:4px">… ${sc.rows.length-7} more characters scored</div>` : ""}
+        </div>
+        <div class="r-links">${links}</div>
+      </div>
+      <div class="r-foot">${esc(c.imageCredit || "No open-license image loaded.")}</div>
+    </article>`;
+}
+
+function renderAnalytics(){
+  const ranked = getRankedCandidates();
+  const answered = Object.values(answers).filter(v=>v&&v!=="unknown").length;
+
+  els.analyticsTable.innerHTML = `
+    <thead><tr>
+      <th>#</th><th>Taxon</th><th>Score</th>
+      <th>Morph</th><th>Prior</th>
+      <th>✓ Match</th><th>✗ Miss</th>
+      <th>Image</th>
+    </tr></thead>
+    <tbody>
+      ${ranked.map((c,i) => {
+        const s = c._score;
+        const barW = Math.round(s.norm*70);
+        return `<tr>
+          <td>${i+1}</td>
+          <td><em>${esc(c.sci)}</em><br><span style="font-size:11px;color:var(--ink-soft)">${esc(c.common||"")}</span></td>
+          <td><strong>${s.score}</strong></td>
+          <td><div class="bar-cell"><div class="bar" style="width:${barW}px"></div><span>${(s.norm*100).toFixed(0)}%</span></div></td>
+          <td>${(s.prior*100).toFixed(0)}%</td>
+          <td>${s.matchCount}</td>
+          <td>${s.missCount}</td>
+          <td>${esc(c.imageSource||"—")}</td>
+        </tr>`;
+      }).join("")}
+    </tbody>`;
+}
+
+function renderAll(){
+  renderQuestion();
+  renderResults();
+  renderAnalytics();
+}
+
+/* ═══════════════════════════════════════════════════
+   DIAGRAM OVERLAY
+═══════════════════════════════════════════════════ */
+const ZONES = {
+  whole:       [4, 8, 92,82],
+  body:        [42,30,17,42],
+  antenna:     [40, 8,22,22],
+  forewing:    [50,15,42,42],
+  basal:       [50,40,18,18],
+  antemedial:  [56,36,17,17],
+  orbicular:   [64,28,13,14],
+  reniform:    [72,25,14,14],
+  postmedial:  [76,20,14,24],
+  subterminal: [82,16,11,28],
+  margin:      [85,12, 9,44],
+  hindwing:    [10,48,34,36],
+  fringe:      [83,45,10,26]
+};
+
+function updateDiagramOverlay(region){
+  els.qOverlay.innerHTML = Object.entries(ZONES).map(([k,[l,t,w,h]])=>
+    `<div class="hz ${k===region?"lit":""}" style="left:${l}%;top:${t}%;width:${w}%;height:${h}%"></div>`
+  ).join("");
+}
+
+/* ═══════════════════════════════════════════════════
+   NAVIGATION ACTIONS
+═══════════════════════════════════════════════════ */
+function setAnswer(qid, value){
+  answers[qid] = value;
+  renderAll();
+}
+
+function nextQuestion(){
+  if(currentQid && !answers[currentQid]) answers[currentQid] = "unknown";
+  const next = chooseNextQuestion();
+  if(next){
+    if(currentQid) questionHistory.push(currentQid);
+    currentQid = next;
+  }
+  renderAll();
+}
+
+function backQuestion(){
+  const prev = questionHistory.pop();
+  if(prev){
+    delete answers[currentQid]; // un-answer current before going back
+    currentQid = prev;
+  }
+  renderAll();
+}
+
+function resetKey(){
+  answers = {};
+  questionHistory = [];
+  currentQid = characters[0].id;
+  candidates.forEach(c => { c.localPrior = c._basePrior || c.localPrior; });
+  renderAll();
+}
+
+/* ═══════════════════════════════════════════════════
+   iNATURALIST GEOCODE + OCCURRENCE
+═══════════════════════════════════════════════════ */
+async function geocode(q){
+  const params = new URLSearchParams({q, format:"json", limit:"1"});
+  const res = await fetch(`${API.nominatim}?${params}`,
+    {headers:{"User-Agent":"moth-visual-key/4.0"}});
+  if(!res.ok) throw new Error("Geocoding failed");
+  const data = await res.json();
+  if(!data.length) throw new Error("Location not found — try a nearby city or country name");
+  return {
+    lat: parseFloat(data[0].lat),
+    lng: parseFloat(data[0].lon),
+    name: data[0].display_name.split(",").slice(0,3).join(", ")
+  };
+}
+
+async function loadLocalCandidates(){
+  const q = els.locationInput.value.trim();
+  if(!q){ setStatus("Enter a location first.", "err"); return; }
+  els.searchBtn.disabled = true;
+  setStatus("Geocoding location…");
+  try{
+    const loc = await geocode(q);
+    localContext = {...loc, loaded:true};
+    setStatus(`Fetching moth observations near ${loc.name}…`);
+
+    const params = new URLSearchParams({
+      taxon_id: String(MOTH_TAXON_ID),
+      without_taxon_id: String(BUTTERFLY_TAXON_ID),
+      lat: String(loc.lat),
+      lng: String(loc.lng),
+      radius: String(SEARCH_RADIUS_KM),
+      month: getMonths(),
+      quality_grade: "research",
+      per_page: "100",
+      order: "desc",
+      order_by: "observations_count"
+    });
+
+    const res = await fetch(`${API.inatSpeciesCounts}?${params}`);
+    if(!res.ok) throw new Error("iNaturalist request failed");
+    const data = await res.json();
+    const results = data.results || [];
+    mergeINatCandidates(results);
+
+    setStatus(`Loaded ${results.length} taxa near ${loc.name}. Enriching images…`, "ok");
+    renderAll();
+    scheduleImageEnrichment();
+    enrichGbif();
+  }catch(e){
+    setStatus(e.message || "Could not load local candidates.", "err");
+  }finally{
+    els.searchBtn.disabled = false;
+  }
+}
+
+function mergeINatCandidates(results){
+  const maxCount = Math.max(1, ...results.map(r => r.count || 0));
+  const bySci = new Map(candidates.map(c => [c.sci.toLowerCase(), c]));
+
+  for(const r of results){
+    const t = r.taxon || {};
+    const sci = t.name; if(!sci) continue;
+    const key = sci.toLowerCase();
+    const prior = Math.max(0.05, Math.min(0.95,
+      Math.log10((r.count||0)+1) / Math.log10(maxCount+1)));
+
+    if(bySci.has(key)){
+      const c = bySci.get(key);
+      c.localCount   = r.count || 0;
+      c.localPrior   = Math.max(c.localPrior || 0, prior);
+      c.inat         = c.inat || t.id;
+      c.common       = c.common || t.preferred_common_name;
+      c.family       = c.family || t.iconic_taxon_name;
+      if(!c.image) applyINatPhoto(c, t.default_photo);
+    }else{
+      const c = {
+        sci,
+        common:      t.preferred_common_name || sci,
+        family:      t.iconic_taxon_name || "",
+        inat:        t.id,
+        source:      "inat",
+        localCount:  r.count || 0,
+        localPrior:  prior,
+        traits:      null,
+        traitQuality:null,
+        image:       null,
+        imageCredit: null,
+        imageSource: null,
+        gbifKey:     null,
+        commonsPage: null,
+        note:        "Occurrence candidate only — no curated trait profile."
+      };
+      applyINatPhoto(c, t.default_photo);
+      candidates.push(c);
+      bySci.set(key, c);
+    }
+  }
+  // Trim to top 100 by prior to keep performance reasonable
+  candidates = getRankedCandidates().map(({_score,...c})=>c).slice(0,100);
+}
+
+function applyINatPhoto(c, photo){
+  if(!photo) return;
+  const url = photo.medium_url || photo.square_url || photo.url;
+  if(url){
+    c.image       = url;
+    c.imageCredit = `iNaturalist: ${photo.attribution||""} · ${photo.license_code||"license not returned"}`;
+    c.imageSource = "iNaturalist";
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   IMAGE ENRICHMENT (Wikimedia Commons)
+═══════════════════════════════════════════════════ */
+async function fetchCommonsImage(search){
+  try{
+    const params = new URLSearchParams({
+      action:"query", generator:"search",
+      gsrsearch:`file:${search}`,
+      gsrlimit:"6", gsrnamespace:"6",
+      prop:"imageinfo", iiprop:"url|extmetadata",
+      iiurlwidth:"800", format:"json", origin:"*"
+    });
+    const res = await fetch(`${API.commons}?${params}`);
+    if(!res.ok) return null;
+    const data = await res.json();
+    const pages = Object.values(data.query?.pages || {});
+    for(const p of pages){
+      const info = p.imageinfo?.[0];
+      if(!info?.thumburl && !info?.url) continue;
+      const meta   = info.extmetadata || {};
+      const license= stripHtml(meta.LicenseShortName?.value || meta.License?.value || "");
+      const artist = stripHtml(meta.Artist?.value || meta.Credit?.value || "");
+      return {
+        url:    info.thumburl || info.url,
+        page:   info.descriptionurl || meta.LicenseUrl?.value || "",
+        credit: [artist, license].filter(Boolean).join("; ")
+      };
+    }
+    return null;
+  }catch(e){ return null; }
+}
+
+function stripHtml(html){ return String(html||"").replace(/<[^>]*>/g,"").replace(/\s+/g," ").trim(); }
+
+function scheduleImageEnrichment(){
+  imageEnrichQueue = getRankedCandidates()
+    .slice(0, 18)
+    .filter(c => !c.image)
+    .map(c => c.sci);
+  if(!enrichRunning) runEnrichQueue();
+}
+
+async function runEnrichQueue(){
+  enrichRunning = true;
+  while(imageEnrichQueue.length){
+    const sci = imageEnrichQueue.shift();
+    const c   = candidates.find(x => x.sci === sci);
+    if(!c || c.image){ continue; }
+    const img = await fetchCommonsImage(sci + " moth");
+    if(img){
+      c.image       = img.url;
+      c.imageCredit = `Wikimedia Commons: ${img.credit}`;
+      c.imageSource = "Wikimedia Commons";
+      c.commonsPage = img.page;
+      renderResults();
+    }
+    await sleep(120); // polite rate-limiting
+  }
+  enrichRunning = false;
+}
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+/* ═══════════════════════════════════════════════════
+   GBIF KEY ENRICHMENT
+═══════════════════════════════════════════════════ */
+async function enrichGbif(){
+  const toEnrich = getRankedCandidates().slice(0,20).filter(c=>!c.gbifKey);
+  for(const c of toEnrich){
+    try{
+      const params = new URLSearchParams({name:c.sci, kingdom:"Animalia",
+        class:"Insecta", order:"Lepidoptera"});
+      const res = await fetch(`${API.gbifMatch}?${params}`);
+      if(res.ok){
+        const d = await res.json();
+        if(d.usageKey) c.gbifKey = d.usageKey;
+      }
+    }catch(e){}
+    await sleep(80);
+  }
+  renderResults();
+  renderAnalytics();
+}
+
+/* ═══════════════════════════════════════════════════
+   REFERENCE DIAGRAMS — curated direct Commons URLs
+   These are stable, public-domain or CC-licensed files
+   on Wikimedia Commons, verified to be actual moth/
+   Lepidoptera morphology diagrams.
+═══════════════════════════════════════════════════ */
+const DIAGRAMS = {
+  "wing-pattern": {
+    // Noctuidae forewing pattern terminology (Forbes 1954, PD)
+    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Noctuid_wing_areas.svg/800px-Noctuid_wing_areas.svg.png",
+    credit: "Noctuid wing pattern terminology",
+    license: "Public domain",
+    page: "https://commons.wikimedia.org/wiki/File:Noctuid_wing_areas.svg",
+    fallbackUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Moth_wing_pattern_illustration.svg/800px-Moth_wing_pattern_illustration.svg.png"
+  },
+  "venation": {
+    // Lepidoptera wing venation (CC-BY-SA)
+    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Lepidoptera_wing_veins.svg/800px-Lepidoptera_wing_veins.svg.png",
+    credit: "Lepidoptera wing venation diagram",
+    license: "CC BY-SA 3.0",
+    page: "https://commons.wikimedia.org/wiki/File:Lepidoptera_wing_veins.svg",
+    fallbackUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Butterfly_wing_veins.svg/800px-Butterfly_wing_veins.svg.png"
+  },
+  "catocala": {
+    // Catocala forewing — PD illustration from old entomology text
+    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Catocala_cara.jpg/800px-Catocala_cara.jpg",
+    credit: "Catocala cara (underwing moth) showing forewing/hindwing pattern",
+    license: "Public domain",
+    page: "https://commons.wikimedia.org/wiki/File:Catocala_cara.jpg",
+    fallbackUrl: null
+  },
+  "question-default": {
+    // General Noctuidae forewing anatomy SVG (PD)
+    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Noctuid_wing_areas.svg/600px-Noctuid_wing_areas.svg.png",
+    credit: "Noctuid forewing regions (Forbes 1954 terminology)",
+    license: "Public domain",
+    page: "https://commons.wikimedia.org/wiki/File:Noctuid_wing_areas.svg",
+    fallbackUrl: null
+  }
+};
+
+function setDiagram(key, target="main"){
+  const d    = DIAGRAMS[key];
+  const img  = target==="question" ? els.qDiagramImg   : els.mainDiagramImg;
+  const ph   = target==="question" ? els.qDiagramPh    : els.mainDiagramPh;
+  const cred = target==="question" ? els.qDiagramCredit: els.mainDiagramCredit;
+
+  if(!d){
+    ph.style.display  = "block";
+    ph.textContent    = "No diagram available for this selection.";
+    img.style.display = "none";
+    cred.textContent  = "";
+    return;
+  }
+
+  ph.style.display  = "block";
+  ph.textContent    = "Loading…";
+  img.style.display = "none";
+
+  const tryLoad = (src, isFallback) => {
+    img.onload = () => {
+      img.style.display = "block";
+      ph.style.display  = "none";
+      cred.innerHTML    = `${esc(d.credit)} · ${esc(d.license)}`
+        + (d.page ? ` · <a href="${esc(d.page)}" target="_blank" rel="noopener noreferrer">source</a>` : "");
+    };
+    img.onerror = () => {
+      if(!isFallback && d.fallbackUrl){
+        tryLoad(d.fallbackUrl, true);
+      } else {
+        img.style.display = "none";
+        ph.style.display  = "block";
+        ph.innerHTML = `Could not load diagram. `
+          + `<a href="${esc(d.page||"https://commons.wikimedia.org")}" target="_blank" rel="noopener noreferrer">Open on Wikimedia Commons ↗</a>`;
+        cred.textContent = "";
+      }
+    };
+    img.src = src;
+  };
+
+  tryLoad(d.url, false);
+}
+
+// Legacy alias so old calls still work
+function loadDiagram(searchTerm, target="main"){
+  // Map old search strings to diagram keys
+  const map = {
+    "Noctuidae wing pattern terminology": "wing-pattern",
+    "Lepidoptera wing venation":           "venation",
+    "Catocala forewing pattern":           "catocala"
+  };
+  setDiagram(map[searchTerm] || "wing-pattern", target);
+}
+
+/* ═══════════════════════════════════════════════════
+   STATUS HELPER
+═══════════════════════════════════════════════════ */
+function setStatus(msg, cls=""){
+  els.status.textContent  = msg;
+  els.status.className    = "status-line" + (cls ? " "+cls : "");
+}
+
+/* ═══════════════════════════════════════════════════
+   INITIALISE
+═══════════════════════════════════════════════════ */
+function initializeCandidates(){
+  candidates = curatedProfiles.map(p => ({
+    ...p,
+    source:      "curated",
+    localCount:  0,
+    localPrior:  0.35,
+    gbifKey:     null,
+    image:       null,
+    imageCredit: null,
+    imageSource: null,
+    commonsPage: null
+  }));
+  renderAll();
+  scheduleImageEnrichment();
+  setDiagram("question-default", "question");
+}
+
+/* ═══════════════════════════════════════════════════
+   EVENT WIRING
+═══════════════════════════════════════════════════ */
+// Tab switching
+document.querySelectorAll(".tab").forEach(btn =>
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    ["key-panel","diagram-panel","analytics-panel","sources-panel"].forEach(id =>
+      $(id).classList.toggle("hidden", id !== btn.dataset.panel));
+  })
+);
+
+// Navigation
+els.searchBtn.addEventListener("click", loadLocalCandidates);
+els.locationInput.addEventListener("keydown", e => { if(e.key==="Enter") loadLocalCandidates(); });
+els.nextBtn.addEventListener("click", nextQuestion);
+els.backBtn.addEventListener("click", backQuestion);
+els.skipBtn.addEventListener("click", () => {
+  if(currentQid) answers[currentQid] = "unknown";
+  nextQuestion();
+});
+els.resetBtn.addEventListener("click", () => {
+  if(confirm("Reset all answers?")) resetKey();
+});
+
+// Diagram panel buttons
+$("load-wing-pattern").addEventListener("click", () => setDiagram("wing-pattern", "main"));
+$("load-venation").addEventListener("click",     () => setDiagram("venation", "main"));
+$("load-catocala").addEventListener("click",     () => setDiagram("catocala", "main"));
+$("load-genitalia-note").addEventListener("click", () => {
+  els.mainDiagramImg.style.display  = "none";
+  els.mainDiagramPh.style.display   = "block";
+  els.mainDiagramPh.innerHTML = `<strong style="color:var(--warn-ink)">⚠ Genitalia note</strong><br><br>
+    Many moth genera (especially Acronicta, Catocala, and micromoths) require genitalia dissection for
+    species-level determination. Visual keys cannot replace this for cryptic species pairs.
+    Refer to specialist keys such as Covell (1984), Lafontaine & Fibiger (2006), or regional treatments.`;
+  els.mainDiagramCredit.textContent = "";
+});
+
+// Sort / filter
+if(els.filterFamily) els.filterFamily.addEventListener("change", renderResults);
+if(els.sortBy)       els.sortBy.addEventListener("change", renderResults);
+
+// Boot
+initializeCandidates();
+</script>
+</body>
+</html>
